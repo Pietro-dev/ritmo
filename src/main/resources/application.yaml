@@ -1,3 +1,57 @@
+# Configurações comuns para todos os perfis
 spring:
   application:
     name: estudai
+
+  # Configuração para ativar o perfil padrão como 'dev'
+  profiles:
+    active: dev
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
+server:
+  port: ${PORT:8080}
+
+---
+# PERFIL DE DESENVOLVIMENTO
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    # Banco local PostgreSQL por padrão, mas customizável via variáveis locais
+    url: ${DEV_DB_URL}
+    username: ${DEV_DB_USERNAME}
+    password: ${DEV_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update # Atualiza as tabelas automaticamente
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  thymeleaf:
+    cache: false
+---
+# PERFIL DE PRODUÇÃO
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    # Obrigatório passar as variáveis de ambiente em produção
+    url: ${PROD_DATASOURCE_URL}
+    username: ${PROD_DATASOURCE_USERNAME}
+    password: ${PROD_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  thymeleaf:
+    cache: true # Mantém cache ativado para máxima performance
