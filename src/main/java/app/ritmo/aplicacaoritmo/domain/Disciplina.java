@@ -1,4 +1,4 @@
-package app.estudai.aplicacaoestudai.domain;
+package app.ritmo.aplicacaoritmo.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;

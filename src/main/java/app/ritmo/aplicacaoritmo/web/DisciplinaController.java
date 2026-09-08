@@ -1,9 +1,9 @@
-package app.estudai.aplicacaoestudai.web;
+package app.ritmo.aplicacaoritmo.web;
 
-import app.estudai.aplicacaoestudai.dto.DisciplinaInputDTO;
-import app.estudai.aplicacaoestudai.dto.DisciplinaOutputDTO;
-import app.estudai.aplicacaoestudai.exceptions.NegocioException;
-import app.estudai.aplicacaoestudai.services.DisciplinaService;
+import app.ritmo.aplicacaoritmo.dto.DisciplinaInputDTO;
+import app.ritmo.aplicacaoritmo.dto.DisciplinaOutputDTO;
+import app.ritmo.aplicacaoritmo.exceptions.NegocioException;
+import app.ritmo.aplicacaoritmo.services.DisciplinaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

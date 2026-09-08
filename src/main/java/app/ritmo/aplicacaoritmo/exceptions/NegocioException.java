@@ -1,4 +1,4 @@
-package app.estudai.aplicacaoestudai.exceptions;
+package app.ritmo.aplicacaoritmo.exceptions;
 
 public class NegocioException extends RuntimeException{
     /*

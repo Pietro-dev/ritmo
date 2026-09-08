@@ -1,4 +1,4 @@
-package app.estudai.aplicacaoestudai;
+package app.ritmo.aplicacaoritmo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

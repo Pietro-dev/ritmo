@@ -1,4 +1,4 @@
-package app.estudai.aplicacaoestudai.dto;
+package app.ritmo.aplicacaoritmo.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

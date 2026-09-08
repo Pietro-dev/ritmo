@@ -1,4 +1,4 @@
-package app.estudai.aplicacaoestudai.dto;
+package app.ritmo.aplicacaoritmo.dto;
 
 public record DisciplinaOutputDTO(Long id, String nome) {
 }

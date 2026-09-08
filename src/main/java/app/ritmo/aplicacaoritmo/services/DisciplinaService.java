@@ -1,10 +1,10 @@
-package app.estudai.aplicacaoestudai.services;
+package app.ritmo.aplicacaoritmo.services;
 
-import app.estudai.aplicacaoestudai.domain.Disciplina;
-import app.estudai.aplicacaoestudai.dto.DisciplinaInputDTO;
-import app.estudai.aplicacaoestudai.dto.DisciplinaOutputDTO;
-import app.estudai.aplicacaoestudai.exceptions.NegocioException;
-import app.estudai.aplicacaoestudai.repositories.DisciplinaRepository;
+import app.ritmo.aplicacaoritmo.domain.Disciplina;
+import app.ritmo.aplicacaoritmo.dto.DisciplinaInputDTO;
+import app.ritmo.aplicacaoritmo.dto.DisciplinaOutputDTO;
+import app.ritmo.aplicacaoritmo.exceptions.NegocioException;
+import app.ritmo.aplicacaoritmo.repositories.DisciplinaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class DisciplinaService {
         return new DisciplinaOutputDTO(disciplina.getId(), disciplina.getNome());
     }
 
-    // metodo para atualizar um disciplina
+    // metodo para atualizar uma disciplina
     @Transactional
     public void atualizar(Long id, DisciplinaInputDTO dto) {
         Disciplina disciplina = repository.findById(id).orElseThrow(()->new NegocioException("Disciplina não encontrada!"));
