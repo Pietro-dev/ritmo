@@ -10,25 +10,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class DisciplinaServices {
+public class DisciplinaService {
     @Autowired
     private DisciplinaRepository repository;
 
     @Transactional
     public void cadastrar(DisciplinaInputDTO dto) {
+        // verfica se a disciplina existe
         if(repository.existsByNome(dto.nome())){
             throw new NegocioException("Já existe uma disciplina cadastrada com esse nome");
         }
+        // padroniza o salvamento de disciplinas no banco com letra minúscula
         Disciplina disciplina = new Disciplina(dto.nome().toLowerCase());
         disciplina = repository.save(disciplina);
     }
 
     public List<DisciplinaOutputDTO> listar(){
+        // na listagem de disciplinas, para melhor user experience, capitalizamos as disciplinas
         return StreamSupport.stream(repository.findAll().spliterator(), false)
                 .map(d -> new DisciplinaOutputDTO(d.getId(), capitalizar(d.getNome())))
                 .collect(Collectors.toList());
@@ -43,12 +45,15 @@ public class DisciplinaServices {
         return texto.substring(0, 1).toUpperCase() + texto.substring(1);
     }
 
+    // metodo para buscar a displina pelo id (e permitir posterior edição)
     public DisciplinaOutputDTO buscarPeloId(Long id) {
         Disciplina disciplina = repository.findById(id).orElseThrow(()-> new NegocioException("Disciplina não encontrada!"));
 
+        // se a disciplina for encontrada pelo id, cria e retorna um novo dto
         return new DisciplinaOutputDTO(disciplina.getId(), disciplina.getNome());
     }
 
+    // metodo para atualizar um disciplina
     @Transactional
     public void atualizar(Long id, DisciplinaInputDTO dto) {
         Disciplina disciplina = repository.findById(id).orElseThrow(()->new NegocioException("Disciplina não encontrada!"));
@@ -62,6 +67,7 @@ public class DisciplinaServices {
         repository.save(disciplina);
     }
 
+    // exclusao de disciplinas
     public void excluir(Long id) {
         if (!repository.existsById(id)) {
             throw new NegocioException("Não é possível excluir uma disciplina inesistente!");
