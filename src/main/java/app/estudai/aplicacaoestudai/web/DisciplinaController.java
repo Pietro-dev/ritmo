@@ -3,20 +3,19 @@ package app.estudai.aplicacaoestudai.web;
 import app.estudai.aplicacaoestudai.dto.DisciplinaInputDTO;
 import app.estudai.aplicacaoestudai.dto.DisciplinaOutputDTO;
 import app.estudai.aplicacaoestudai.exceptions.NegocioException;
-import app.estudai.aplicacaoestudai.services.DisciplinaServices;
+import app.estudai.aplicacaoestudai.services.DisciplinaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/disciplinas")
 public class DisciplinaController {
     @Autowired
-    DisciplinaServices service;
+    DisciplinaService service;
 
     @GetMapping
     public String listar(Model model){
