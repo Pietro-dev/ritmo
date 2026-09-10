@@ -3,7 +3,9 @@ package app.ritmo.aplicacaoritmo.services;
 import app.ritmo.aplicacaoritmo.domain.Disciplina;
 import app.ritmo.aplicacaoritmo.dto.DisciplinaInputDTO;
 import app.ritmo.aplicacaoritmo.dto.DisciplinaOutputDTO;
+import app.ritmo.aplicacaoritmo.exceptions.EntidadeDuplicadaException;
 import app.ritmo.aplicacaoritmo.exceptions.NegocioException;
+import app.ritmo.aplicacaoritmo.exceptions.RecursoNaoEncontrado;
 import app.ritmo.aplicacaoritmo.repositories.DisciplinaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +22,19 @@ public class DisciplinaService {
 
     @Transactional
     public void cadastrar(DisciplinaInputDTO dto) {
+        String nomePadronizado = dto.nome().trim().toLowerCase();
         // verfica se a disciplina existe
-        if(repository.existsByNome(dto.nome())){
-            throw new NegocioException("Já existe uma disciplina cadastrada com esse nome");
+        if(repository.existsByNome(nomePadronizado)){
+            throw new EntidadeDuplicadaException("Já existe uma disciplina cadastrada com esse nome");
         }
         // padroniza o salvamento de disciplinas no banco com letra minúscula
-        Disciplina disciplina = new Disciplina(dto.nome().toLowerCase());
-        disciplina = repository.save(disciplina);
+        Disciplina disciplina = new Disciplina(nomePadronizado);
+        repository.save(disciplina);
     }
 
     public List<DisciplinaOutputDTO> listar(){
         // na listagem de disciplinas, para melhor user experience, capitalizamos as disciplinas
-        return StreamSupport.stream(repository.findAll().spliterator(), false)
+        return repository.findAll().stream()
                 .map(d -> new DisciplinaOutputDTO(d.getId(), capitalizar(d.getNome())))
                 .collect(Collectors.toList());
     }
@@ -47,30 +50,32 @@ public class DisciplinaService {
 
     // metodo para buscar a displina pelo id (e permitir posterior edição)
     public DisciplinaOutputDTO buscarPeloId(Long id) {
-        Disciplina disciplina = repository.findById(id).orElseThrow(()-> new NegocioException("Disciplina não encontrada!"));
+        Disciplina disciplina = repository.findById(id).orElseThrow(()-> new RecursoNaoEncontrado("Disciplina não encontrada!"));
 
         // se a disciplina for encontrada pelo id, cria e retorna um novo dto
-        return new DisciplinaOutputDTO(disciplina.getId(), disciplina.getNome());
+        return new DisciplinaOutputDTO(disciplina.getId(), capitalizar(disciplina.getNome()));
     }
 
     // metodo para atualizar uma disciplina
     @Transactional
     public void atualizar(Long id, DisciplinaInputDTO dto) {
-        Disciplina disciplina = repository.findById(id).orElseThrow(()->new NegocioException("Disciplina não encontrada!"));
+        Disciplina disciplina = repository.findById(id).orElseThrow(()->new RecursoNaoEncontrado("Disciplina não encontrada!"));
+
+        String novoNomePadronizado = dto.nome().trim().toLowerCase();
 
         // não é possível renomear uma disciplina com o nome de outra disciplina
-        if (repository.existsByNomeAndIdNot(dto.nome(), id)) {
-            throw new NegocioException("Já existe uma disciplina com esse nome!");
+        if (repository.existsByNomeAndIdNot(novoNomePadronizado, id)) {
+            throw new EntidadeDuplicadaException("Já existe uma disciplina com esse nome!");
         }
 
-        disciplina.setNome(dto.nome());
+        disciplina.setNome(novoNomePadronizado);
         repository.save(disciplina);
     }
 
     // exclusao de disciplinas
     public void excluir(Long id) {
         if (!repository.existsById(id)) {
-            throw new NegocioException("Não é possível excluir uma disciplina inesistente!");
+            throw new RecursoNaoEncontrado("Não é possível excluir uma disciplina inexistente!");
         }
         repository.deleteById(id);
     }

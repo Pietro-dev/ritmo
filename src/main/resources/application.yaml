@@ -1,7 +1,7 @@
 # Configurações comuns para todos os perfis
 spring:
   application:
-    name: estudai
+    name: ritmo
 
   # Configuração para ativar o perfil padrão como 'dev'
   profiles:

@@ -17,11 +17,11 @@ public class GlobalExceptionHandler {
     */
 
     // captura erros de validação e regras do Estudaí
-    @ExceptionHandler
-    public ModelAndView handleException(NegocioException ex){
+    @ExceptionHandler(NegocioException.class)
+    public ModelAndView handleNegocioException(NegocioException ex){
         log.warn("Alerta de negócio: {}", ex.getMessage());
 
-        ModelAndView mv = new ModelAndView("error");
+        ModelAndView mv = new ModelAndView("erro");
         mv.addObject("message", ex.getMessage());
         return mv;
     }
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     public ModelAndView handleGenericException(Exception ex){
         log.error("Erro crítico inesperado", ex);
 
-        ModelAndView mv = new ModelAndView("error");
+        ModelAndView mv = new ModelAndView("erro");
         mv.addObject("message", "Ocorreu um erro interno inesperado");
         return mv;
     }
