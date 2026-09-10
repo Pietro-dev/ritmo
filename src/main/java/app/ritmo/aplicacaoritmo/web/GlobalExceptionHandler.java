@@ -17,8 +17,8 @@ public class GlobalExceptionHandler {
     */
 
     // captura erros de validação e regras do Estudaí
-    @ExceptionHandler
-    public ModelAndView handleException(NegocioException ex){
+    @ExceptionHandler(NegocioException.class)
+    public ModelAndView handleNegocioException(NegocioException ex){
         log.warn("Alerta de negócio: {}", ex.getMessage());
 
         ModelAndView mv = new ModelAndView("error");
