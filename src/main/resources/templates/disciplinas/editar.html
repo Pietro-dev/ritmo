@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section layout:fragment="content">
+
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Editar disciplina</h2>
+            <p class="text-muted mb-0">Atualize as informações da disciplina selecionada.</p>
+        </div>
+
+        <a th:href="@{/disciplinas}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>
+            Voltar
+        </a>
+    </div>
+
+    <!-- Formulário -->
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-white">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 rounded p-3 me-3">
+                            <i class="bi bi-pencil-square fs-3 text-primary"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-semibold mb-1">Dados da disciplina</h5>
+                            <small class="text-muted">Altere o nome da disciplina abaixo.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <form th:action="@{/disciplinas/{id}/editar(id=${disciplinaId})}" th:object="${disciplinaInput}" method="post">
+
+                        <div class="mb-4">
+                            <label for="nome" class="form-label fw-semibold">Nome da disciplina</label>
+                            <input type="text" id="nome" th:field="*{nome}" class="form-control" placeholder="Ex: Programação Web" autocomplete="off">
+                            <div class="text-danger small mt-2" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}">Erro de validação</div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a th:href="@{/disciplinas}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg me-1"></i>
+                                Cancelar
+                            </a>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-1"></i>
+                                Salvar alterações
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+</html>
