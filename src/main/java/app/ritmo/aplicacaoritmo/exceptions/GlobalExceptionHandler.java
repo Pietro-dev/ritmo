@@ -1,6 +1,5 @@
-package app.ritmo.aplicacaoritmo.web;
+package app.ritmo.aplicacaoritmo.exceptions;
 
-import app.ritmo.aplicacaoritmo.exceptions.NegocioException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

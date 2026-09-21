@@ -1,4 +1,4 @@
-package app.ritmo.aplicacaoritmo.web;
+package app.ritmo.aplicacaoritmo.controllers;
 
 import app.ritmo.aplicacaoritmo.dto.DisciplinaInputDTO;
 import app.ritmo.aplicacaoritmo.dto.DisciplinaOutputDTO;
