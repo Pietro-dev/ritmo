@@ -13,6 +13,11 @@ public class Disciplina {
     @Column(nullable = false, unique = true)
     private String nome;
 
+    // Relacionamento com o usuário dono da disciplina
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     public Disciplina(String nome) {
         this.nome = nome;
     }
