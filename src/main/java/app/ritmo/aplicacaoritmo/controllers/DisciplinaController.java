@@ -1,83 +1,92 @@
 package app.ritmo.aplicacaoritmo.controllers;
 
+
 import app.ritmo.aplicacaoritmo.dto.DisciplinaInputDTO;
-import app.ritmo.aplicacaoritmo.dto.DisciplinaOutputDTO;
+import app.ritmo.aplicacaoritmo.exceptions.EntidadeDuplicadaException;
 import app.ritmo.aplicacaoritmo.exceptions.NegocioException;
 import app.ritmo.aplicacaoritmo.services.DisciplinaService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/disciplinas")
 public class DisciplinaController {
-    @Autowired
-    DisciplinaService service;
+
+    private final DisciplinaService service;
 
     @GetMapping
-    public String listar(Model model){
-        model.addAttribute("disciplinas", service.listar());
+    public String listar(Model model) {
+        model.addAttribute("disciplinas", service.listarDoUsuarioLogado());
         model.addAttribute("disciplinaInput", new DisciplinaInputDTO(""));
 
         return "disciplinas/lista";
     }
 
+    @GetMapping("/nova")
+    public String exibirFormularioCriacao(Model model) {
+        model.addAttribute("disciplinaInput",new DisciplinaInputDTO(""));
+
+        return "disciplinas/nova";
+    }
+
     @PostMapping
-    public String cadastrar(@Valid @ModelAttribute("disciplinaInput") DisciplinaInputDTO dto,
-                            BindingResult result, Model model){
-        if(result.hasErrors()){
-            model.addAttribute("disciplinas", service.listar());
+    public String cadastrar(
+            @Valid @ModelAttribute("disciplinaInput") DisciplinaInputDTO dto,
+            BindingResult result,
+            Model model
+    ) {
+        if (result.hasErrors()) {
+            model.addAttribute("disciplinas", service.listarDoUsuarioLogado());
             return "disciplinas/lista";
         }
+
         try {
             service.cadastrar(dto);
-        } catch (NegocioException ex) {
+            return "redirect:/disciplinas";
+        } catch (EntidadeDuplicadaException ex) {
             result.rejectValue("nome", "duplicado", ex.getMessage());
-            model.addAttribute("disciplinas", service.listar());
+            model.addAttribute("disciplinas", service.listarDoUsuarioLogado());
             return "disciplinas/lista";
         }
-        return "redirect:/disciplinas";
     }
 
     @GetMapping("/{id}/editar")
-    public String exibirEdicao(@PathVariable Long id, Model model) {
-        // Busca os dados atuais da disciplina para exibir no formulário
-        DisciplinaOutputDTO dto = service.buscarPeloId(id);
-
+    public String exibirFormularioEdicao(@PathVariable Long id, Model model) {
         model.addAttribute("disciplinaId", id);
-        // Passa o DTO preenchido com o nome atual
-        model.addAttribute("disciplinaInput", new DisciplinaInputDTO(dto.nome()));
+        model.addAttribute("disciplinaInput",service.buscarPeloIdDoUsuario(id));
 
         return "disciplinas/editar";
     }
 
-    @PostMapping("/{id}/editar")
+    @PutMapping("/{id}")
     public String atualizar(@PathVariable Long id, @Valid @ModelAttribute("disciplinaInput") DisciplinaInputDTO dto, BindingResult result, Model model) {
-        // Valida se o usuário limpou o campo ou digitou algo inválido
         if (result.hasErrors()) {
             model.addAttribute("disciplinaId", id);
             return "disciplinas/editar";
         }
 
         try {
-            // Tenta executar a alteração no Use Case
             service.atualizar(id, dto);
+            return "redirect:/disciplinas";
+
         } catch (NegocioException ex) {
-            // Se houver erro de negócio vincula o erro ao campo 'nome'
-            result.rejectValue("nome", "duplicado", ex.getMessage());
+            result.rejectValue("nome","duplicado",ex.getMessage());
+
             model.addAttribute("disciplinaId", id);
+
             return "disciplinas/editar";
         }
-
-        return "redirect:/disciplinas";
     }
 
-    @PostMapping("/{id}/excluir")
-    public String excluir(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public String excluir(@PathVariable Long id) {
         service.excluir(id);
         return "redirect:/disciplinas";
     }
+
 }

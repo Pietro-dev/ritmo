@@ -37,7 +37,11 @@
                 </div>
 
                 <div class="card-body p-4">
-                    <form th:action="@{/disciplinas/{id}/editar(id=${disciplinaId})}" th:object="${disciplinaInput}" method="post">
+                    <form th:action="@{/disciplinas/{id}(id=${disciplinaId})}"
+                          th:object="${disciplinaInput}"
+                          method="post">
+
+                        <input type="hidden" name="_method" value="put">
 
                         <div class="mb-4">
                             <label for="nome" class="form-label fw-semibold">Nome da disciplina</label>
