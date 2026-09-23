@@ -1,4 +1,4 @@
-package app.ritmo.aplicacaoritmo.services;
+package app.ritmo.aplicacaoritmo.domain;
 
 public enum AcaoAuditoria {
     LOGIN,
