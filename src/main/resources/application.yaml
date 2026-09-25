@@ -2,6 +2,10 @@
 spring:
   application:
     name: ritmo
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 
   # Configuração para ativar o perfil padrão como 'dev'
   profiles:
@@ -15,6 +19,13 @@ spring:
 
 server:
   port: ${PORT:8080}
+
+  integrations:
+    quotable:
+      base-url: https://api.quotable.io
+    deepl:
+      base-url: https://api-free.deepl.com
+      auth-key: ${DEEPL_AUTH_KEY}
 
 ---
 # PERFIL DE DESENVOLVIMENTO
