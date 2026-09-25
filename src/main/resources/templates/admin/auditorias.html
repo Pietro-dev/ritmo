@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section layout:fragment="content">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Auditorias</h2>
+            <p class="text-muted mb-0">
+                Acompanhe as ações realizadas na aplicação.
+            </p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form th:action="@{/admin/auditorias}"
+                  method="get"
+                  class="row g-3">
+
+                <div class="col-md-4">
+                    <label for="email"
+                           class="form-label fw-semibold">
+                        Usuário
+                    </label>
+
+                    <input id="email"
+                           name="email"
+                           type="text"
+                           class="form-control"
+                           placeholder="E-mail do usuário"
+                           th:value="${email}">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="inicio"
+                           class="form-label fw-semibold">
+                        Data inicial
+                    </label>
+
+                    <input id="inicio"
+                           name="inicio"
+                           type="date"
+                           class="form-control"
+                           th:value="${inicio}">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="fim"
+                           class="form-label fw-semibold">
+                        Data final
+                    </label>
+
+                    <input id="fim"
+                           name="fim"
+                           type="date"
+                           class="form-control"
+                           th:value="${fim}">
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end gap-2">
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Filtrar
+                    </button>
+
+                    <a th:href="@{/admin/auditorias}"
+                       class="btn btn-outline-secondary">
+                        Limpar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Data e hora</th>
+                    <th>Usuário</th>
+                    <th>Ação</th>
+                    <th>Descrição</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="auditoria : ${auditorias}">
+                    <td th:text="${#temporals.format(
+                            auditoria.dataHora,
+                            'dd/MM/yyyy HH:mm:ss'
+                    )}">
+                        23/09/2026 15:30:00
+                    </td>
+
+                    <td th:text="${auditoria.usuarioEmail}">
+                        admin@email.com
+                    </td>
+
+                    <td>
+                        <span class="badge text-bg-secondary"
+                              th:text="${auditoria.acao}">
+                            LOGIN
+                        </span>
+                    </td>
+
+                    <td th:text="${auditoria.descricao}">
+                        Usuário realizou login
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(auditorias)}">
+                    <td colspan="4"
+                        class="text-center text-muted py-5">
+                        Nenhum registro encontrado.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+</html>
