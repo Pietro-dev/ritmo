@@ -14,6 +14,18 @@
             <a class="link-light link-underline-opacity-0 fs-2 fw-bold" th:href="@{/login}">ritmo</a>
 
             <div>
+                <!-- Frase motivacional: um destaque discreto acima do título, some no celular junto com o resto do conteúdo de apoio -->
+                <figure th:if="${frase != null}" class="d-none d-lg-block mb-4 ps-3 border-start border-3 border-warning">
+                    <blockquote class="blockquote mb-1">
+                        <p class="fs-5 fst-italic mb-0" th:text="${frase.frase}">
+                            Uma frase motivacional aparecerá aqui.
+                        </p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer text-white-50 mb-0">
+                        <span th:text="${frase.autor}">Autor</span>
+                    </figcaption>
+                </figure>
+
                 <p class="display-6 fw-bold mb-4 d-none d-lg-block">Estude em blocos curtos e perceba como você aprende.</p>
 
                 <div class="d-flex flex-column gap-1" aria-hidden="true">
@@ -89,10 +101,10 @@
                         </div>
 
                         <div class="mb-4">
-                                <label class="form-label fw-semibold" for="password">Senha</label>
+                            <label class="form-label fw-semibold" for="password">Senha</label>
                             <div class="input-group input-group-lg">
                                 <input type="password" id="password" name="password" class="form-control" autocomplete="current-password" required>
-                                <button type="button" class="btn btn-outline-secondary" data-alternar-senha aria-controls="senha">Mostrar</button>
+                                <button type="button" class="btn btn-outline-secondary" data-alternar-senha aria-controls="password">Mostrar</button>
                             </div>
                         </div>
 

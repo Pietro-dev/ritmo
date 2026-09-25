@@ -5,6 +5,7 @@ import app.ritmo.aplicacaoritmo.domain.StatusCadastro;
 import app.ritmo.aplicacaoritmo.domain.Usuario;
 import app.ritmo.aplicacaoritmo.dto.UsuarioInputDTO;
 import app.ritmo.aplicacaoritmo.repositories.UsuarioRepository;
+import app.ritmo.aplicacaoritmo.services.FraseMotivacionalService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,9 +24,12 @@ public class AuthController {
     UsuarioRepository usuarioRepository;
     @Autowired
     PasswordEncoder encoder;
+    @Autowired
+    private FraseMotivacionalService fraseMotivacionalService;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("frase", fraseMotivacionalService.buscarFraseETraduzir().orElse(null));
         return "login";
     }
 
@@ -50,5 +54,15 @@ public class AuthController {
         Usuario novoUsuario = new Usuario(dto.nome(), dto.email(), encoder.encode(dto.senha()), Role.ROLE_ESTUDANTE, StatusCadastro.ATIVO, LocalDateTime.now());
         usuarioRepository.save(novoUsuario);
         return "redirect:/login?cadastrado=true";
+    }
+
+    @GetMapping("/termos-de-uso")
+    public String termosDeUso() {
+        return "termos-de-uso";
+    }
+
+    @GetMapping("/politica-de-privacidade")
+    public String politicaPrivacidade() {
+        return "politica-de-privacidade";
     }
 }
