@@ -1,6 +1,5 @@
 package app.ritmo.aplicacaoritmo.domain;
 
-import app.ritmo.aplicacaoritmo.services.AcaoAuditoria;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

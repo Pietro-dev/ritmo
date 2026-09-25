@@ -1,5 +1,6 @@
 package app.ritmo.aplicacaoritmo.services;
 
+import app.ritmo.aplicacaoritmo.domain.AcaoAuditoria;
 import app.ritmo.aplicacaoritmo.domain.Disciplina;
 import app.ritmo.aplicacaoritmo.domain.Usuario;
 import app.ritmo.aplicacaoritmo.dto.DisciplinaInputDTO;
