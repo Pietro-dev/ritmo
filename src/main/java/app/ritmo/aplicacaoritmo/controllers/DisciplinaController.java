@@ -27,13 +27,6 @@ public class DisciplinaController {
         return "disciplinas/lista";
     }
 
-    @GetMapping("/nova")
-    public String exibirFormularioCriacao(Model model) {
-        model.addAttribute("disciplinaInput",new DisciplinaInputDTO(""));
-
-        return "disciplinas/nova";
-    }
-
     @PostMapping
     public String cadastrar(
             @Valid @ModelAttribute("disciplinaInput") DisciplinaInputDTO dto,
