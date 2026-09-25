@@ -103,7 +103,7 @@
                         <div class="form-check mb-4">
                             <input type="checkbox" th:field="*{aceitouTermo}" class="form-check-input" id="checkTermo" th:errorclass="is-invalid">
                             <label class="form-check-label text-secondary" for="checkTermo">
-                                Li e concordo com os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a> (LGPD).
+                                Li e concordo com os <a href="/termos-de-uso">Termos de Uso</a> e a <a href="/politica-de-privacidade">Política de Privacidade</a> (LGPD).
                             </label>
                             <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('aceitouTermo')}" th:errors="*{aceitouTermo}"></div>
                         </div>
