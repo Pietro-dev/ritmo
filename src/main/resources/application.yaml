@@ -20,12 +20,12 @@ spring:
 server:
   port: ${PORT:8080}
 
-  integrations:
-    quotable:
-      base-url: https://api.quotable.io
-    deepl:
-      base-url: https://api-free.deepl.com
-      auth-key: ${DEEPL_AUTH_KEY}
+integrations:
+  quotable:
+    base-url: http://api.quotable.io
+  deepl:
+    base-url: https://api-free.deepl.com
+    auth-key: ${DEEPL_AUTH_KEY}
 
 ---
 # PERFIL DE DESENVOLVIMENTO
