@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     * este componente irá capturar o erro gerando um log de aviso e renderizando a erro.html
     */
 
-    // captura erros de validação e regras do Estudaí
+    // captura erros de validação e regras do ritmo
     @ExceptionHandler(NegocioException.class)
     public ModelAndView handleNegocioException(NegocioException ex){
         log.warn("Alerta de negócio: {}", ex.getMessage());
