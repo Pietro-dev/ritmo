@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Termos de Uso | Ritmo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-body-tertiary">
+
+<nav class="navbar navbar-expand-md bg-dark" data-bs-theme="dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold fs-3" th:href="@{/}">ritmo</a>
+        <ul class="nav nav-pills gap-1">
+            <li class="nav-item"><a class="nav-link text-white" th:href="@{/politica-de-privacidade}">Privacidade</a></li>
+            <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/termos-de-uso}">Termos de Uso</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+
+            <header class="mb-4">
+                <h1 class="fw-bold mb-2">Termos de Uso</h1>
+                <p class="text-secondary mb-3">Última atualização: 23 de setembro de 2026</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge rounded-pill text-bg-light border">Projeto Final de Curso · UMC</span>
+                </div>
+            </header>
+
+            <!-- Resumo rápido -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4 border-start border-3 border-warning">
+                    <p class="text-uppercase small fw-semibold text-warning mb-2">Em resumo</p>
+                    <p class="mb-0">
+                        O Ritmo é gratuito, feito para fins educacionais dentro de um projeto acadêmico da UMC.
+                        Sua conta é pessoal, o que você cadastra é seu, e o serviço pode passar por manutenções
+                        sem aviso prévio, já que ainda está em desenvolvimento.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sumário -->
+            <nav class="card border-0 shadow-sm rounded-4 mb-5" aria-label="Sumário dos termos de uso">
+                <div class="card-body p-4">
+                    <p class="fw-semibold mb-2">Sumário</p>
+                    <ol class="mb-0 ps-3">
+                        <li><a href="#aceitacao">Aceitação e objeto</a></li>
+                        <li><a href="#credenciais">Condições de acesso e responsabilidade pelas credenciais</a></li>
+                        <li><a href="#propriedade">Propriedade do conteúdo e uso proibido</a></li>
+                        <li><a href="#carater-academico">Caráter acadêmico e disponibilidade</a></li>
+                        <li><a href="#encerramento">Encerramento de conta</a></li>
+                    </ol>
+                </div>
+            </nav>
+
+            <article>
+                <section id="aceitacao" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">1. Aceitação e objeto</h2>
+                    <p class="mb-0">
+                        Estes Termos de Uso regulam a utilização da plataforma Ritmo, um software educacional
+                        voltado para a gestão metacognitiva e a prática de estudo ativo. Ao criar uma conta, o
+                        usuário declara ciência e concordância integral com estes Termos e com a nossa
+                        <a th:href="@{/politica-de-privacidade}">Política de Privacidade</a>.
+                    </p>
+                </section>
+
+                <section id="credenciais" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">2. Condições de acesso e responsabilidade pelas credenciais</h2>
+                    <ul class="mb-0">
+                        <li>
+                            <strong>Uso pessoal:</strong> a conta é pessoal, individual e intransferível. O
+                            estudante é o único responsável pela veracidade dos dados informados e pela guarda de
+                            sua senha de acesso.
+                        </li>
+                        <li>
+                            <strong>Menores de idade:</strong> a plataforma destina-se a fins educacionais. A
+                            utilização por menores de idade deve ser supervisionada pelos pais ou responsáveis
+                            legais, em conformidade com o princípio do melhor interesse da criança e do
+                            adolescente.
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="propriedade" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">3. Propriedade do conteúdo e uso proibido</h2>
+                    <ul class="mb-3">
+                        <li><strong>Autoria do estudante:</strong> as disciplinas e conteúdos cadastrados pertencem exclusivamente ao estudante que os criou.</li>
+                        <li><strong>Uso individual:</strong> a plataforma opera como uma ferramenta privada de estudos, não realizando o compartilhamento público de conteúdos entre os usuários.</li>
+                    </ul>
+
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4 border-start border-3 border-danger">
+                            <p class="fw-semibold mb-1">Condutas proibidas</p>
+                            <p class="mb-0 text-secondary">
+                                É proibido tentar violar os mecanismos de segurança da plataforma, utilizar
+                                scripts automatizados ou inserir conteúdos ilícitos ou inadequados.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="carater-academico" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">4. Caráter acadêmico e disponibilidade</h2>
+                    <p class="mb-0">
+                        Por tratar-se de um sistema desenvolvido no âmbito de um Projeto Final de Curso (PFC) na
+                        Universidade Mogi das Cruzes (UMC), o serviço é disponibilizado "como está", podendo
+                        passar por manutenções programadas, atualizações ou interrupções temporárias sem prévio
+                        aviso.
+                    </p>
+                </section>
+
+                <section id="encerramento" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">5. Encerramento de conta</h2>
+                    <p class="mb-0">
+                        O usuário pode encerrar sua conta a qualquer momento na plataforma, resultando no descarte
+                        imediato dos seus dados acadêmicos, ressalvadas as obrigações legais de retenção de
+                        registros de acesso descritas na
+                        <a th:href="@{/politica-de-privacidade}">Política de Privacidade</a>.
+                    </p>
+                </section>
+            </article>
+
+            <hr class="my-5">
+
+            <p class="text-secondary">
+                <a th:href="@{/cadastro}">← Voltar ao cadastro</a>
+            </p>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

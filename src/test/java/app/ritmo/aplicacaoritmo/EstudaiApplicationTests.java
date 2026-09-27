@@ -1,4 +1,4 @@
-package app.estudai.aplicacaoestudai;
+package app.ritmo.aplicacaoritmo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
