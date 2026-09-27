@@ -10,7 +10,7 @@ public class Disciplina {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nome;
 
     // Relacionamento com o usuário dono da disciplina
