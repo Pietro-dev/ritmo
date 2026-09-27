@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | Ritmo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+
+<!--/*
+    Model esperado:
+    usuario -> { nome, admin } (admin é booleano; controla se o botão de
+               auditorias aparece. Se o campo no seu DTO tiver outro nome
+               ou vier como role/perfil, me avise que ajusto a condição.)
+    frase   -> { frase, autor, traduzida } (opcional; traduzida é booleano e
+                controla se a nota "tradução automática" aparece)
+*/-->
+
+<body class="bg-body-tertiary">
+
+<nav class="navbar navbar-expand-md bg-dark" data-bs-theme="dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold fs-3" th:href="@{/dashboard}">ritmo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <ul class="nav nav-pills me-auto gap-1 mt-2 mt-md-0">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/dashboard}">Início</a></li>
+                <li class="nav-item"><a class="nav-link text-white" th:href="@{/blocos}">Blocos</a></li>
+                <li class="nav-item"><a class="nav-link text-white" th:href="@{/reflexoes}">Reflexões</a></li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
+                <!-- Só aparece para administradores -->
+                <a th:if="${ehAdmin}" th:href="@{/admin/auditorias}"
+                   class="btn btn-outline-warning rounded-pill">
+                    Auditorias
+                </a>
+
+                <div class="dropdown">
+                    <button class="btn btn-outline-light rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            th:text="${usuario.nome}">Ana Souza</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/perfil}">Meu perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <button type="submit" class="dropdown-item">Sair</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+
+            <header class="mb-4">
+                <h1 class="fw-bold mb-1">Seu dashboard</h1>
+                <p class="text-secondary mb-0">Um resumo rápido antes de tocar o próximo bloco.</p>
+            </header>
+
+            <!-- Frase motivacional -->
+            <div th:if="${frase != null}" class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <p class="text-uppercase small fw-semibold text-warning mb-3">Inspiração para seus estudos</p>
+
+                    <blockquote class="blockquote border-start border-3 border-warning ps-3 mb-0">
+                        <p class="fs-5 fst-italic mb-2" th:text="${frase.frase}">
+                            Uma frase motivacional aparecerá aqui.
+                        </p>
+                        <footer class="blockquote-footer mb-0">
+                            <span th:text="${frase.autor}">Autor</span>
+                            <span th:if="${frase.frase}" class="d-block small text-secondary mt-1">Tradução automática para português</span>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+
+            <!-- Estado vazio: sem frase disponível -->
+            <div th:if="${frase == null}" class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 text-center text-secondary">
+                    <p class="mb-0">Sem frase por hoje, mas sempre dá pra tocar mais um bloco. 🎧</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

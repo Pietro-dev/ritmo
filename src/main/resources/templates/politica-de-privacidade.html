@@ -1,10 +1,233 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Política de Privacidade | Ritmo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body>
+<body class="bg-body-tertiary">
+
+<nav class="navbar navbar-expand-md bg-dark" data-bs-theme="dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold fs-3" th:href="@{/}">ritmo</a>
+        <ul class="nav nav-pills gap-1">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/politica-de-privacidade}">Privacidade</a></li>
+            <li class="nav-item"><a class="nav-link text-white" th:href="@{/termos-de-uso}">Termos de Uso</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+
+            <header class="mb-4">
+                <h1 class="fw-bold mb-2">Política de Privacidade</h1>
+                <p class="text-secondary mb-3">Última atualização: 23 de setembro de 2026</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge rounded-pill text-bg-light border">LGPD · Lei nº 13.709/2018</span>
+                    <span class="badge rounded-pill text-bg-light border">Marco Civil da Internet · Lei nº 12.965/2014</span>
+                </div>
+            </header>
+
+            <!-- Resumo rápido -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4 border-start border-3 border-warning">
+                    <p class="text-uppercase small fw-semibold text-warning mb-2">Em resumo</p>
+                    <p class="mb-0">
+                        O Ritmo coleta só o essencial para funcionar: nome, e-mail, senha e o que você cadastra
+                        para estudar. Não pedimos CPF, telefone, endereço, foto ou dados bancários, e você pode
+                        apagar sua conta e tudo o que ela contém quando quiser.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sumário -->
+            <nav class="card border-0 shadow-sm rounded-4 mb-5" aria-label="Sumário da política de privacidade">
+                <div class="card-body p-4">
+                    <p class="fw-semibold mb-2">Sumário</p>
+                    <ol class="mb-0 ps-3">
+                        <li><a href="#informacoes-gerais">Informações gerais e controlador dos dados</a></li>
+                        <li><a href="#minimizacao">Princípio da minimização dos dados</a></li>
+                        <li><a href="#inventario">Inventário de dados pessoais e bases legais</a></li>
+                        <li><a href="#criancas">Proteção de crianças e adolescentes</a></li>
+                        <li><a href="#cookies">Cookies de navegação</a></li>
+                        <li><a href="#compartilhamento">Compartilhamento e transferência internacional</a></li>
+                        <li><a href="#retencao">Retenção, eliminação e direito ao esquecimento</a></li>
+                        <li><a href="#direitos">Direitos do titular</a></li>
+                    </ol>
+                </div>
+            </nav>
+
+            <article>
+                <section id="informacoes-gerais" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">1. Informações gerais e controlador dos dados</h2>
+                    <p>
+                        A presente Política de Privacidade descreve como a plataforma Ritmo coleta, utiliza,
+                        armazena e protege os dados pessoais dos seus estudantes, em estrita conformidade com a
+                        Lei Geral de Proteção de Dados Pessoais (LGPD — Lei nº 13.709/2018), o Marco Civil da
+                        Internet (Lei nº 12.965/2014) e as diretrizes institucionais do Projeto Final de Curso
+                        (PFC) da Universidade Mogi das Cruzes (UMC).
+                    </p>
+                    <ul>
+                        <li><strong>Controlador dos dados:</strong> Pietro Martins Marques (discente / Projeto de Fim de Curso — UMC).</li>
+                        <li>
+                            <strong>Canal de atendimento e privacidade (DPO / Encarregado):</strong>
+                            <a href="mailto:11262401910@alunos.umc.br">11262401910@alunos.umc.br</a>
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="minimizacao" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">2. Princípio da minimização dos dados</h2>
+                    <p class="mb-0">
+                        Em respeito ao princípio da minimização (Art. 6º, III da LGPD), o Ritmo não coleta dados
+                        pessoais excessivos ou desnecessários, tais como Cadastro de Pessoas Físicas (CPF), número
+                        de telefone, endereço residencial, fotografia de perfil, biometria ou dados bancários.
+                    </p>
+                </section>
+
+                <section id="inventario" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">3. Inventário de dados pessoais e bases legais</h2>
+                    <p>
+                        Coletamos apenas as categorias de dados estritamente necessárias para a prestação do
+                        serviço de microestudo ativo:
+                    </p>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead>
+                            <tr>
+                                <th scope="col">Categoria de dado</th>
+                                <th scope="col">Finalidade concreta de tratamento</th>
+                                <th scope="col">Hipótese legal (LGPD)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Nome completo e e-mail</td>
+                                <td>Autenticação do usuário, identificação da conta e comunicação sobre o serviço.</td>
+                                <td>Execução de contrato (Art. 7º, V)</td>
+                            </tr>
+                            <tr>
+                                <td>Senha de acesso</td>
+                                <td>Autenticação e proteção do acesso individual. Armazenada exclusivamente como hash unidirecional BCrypt.</td>
+                                <td>Execução de contrato (Art. 7º, V)</td>
+                            </tr>
+                            <tr>
+                                <td>Data de cadastro e registro do aceite</td>
+                                <td>Comprovação da manifestação de vontade e consentimento e auditoria de conformidade.</td>
+                                <td>Cumprimento de obrigação legal (Art. 7º, II)</td>
+                            </tr>
+                            <tr>
+                                <td>Endereço IP, data/hora e ações</td>
+                                <td>Rastreabilidade de segurança e registros de acesso à aplicação.</td>
+                                <td>Cumprimento de obrigação legal (Art. 15 do Marco Civil da Internet)</td>
+                            </tr>
+                            <tr>
+                                <td>Disciplinas e conteúdos de estudo</td>
+                                <td>Armazenamento de tópicos e métricas para execução do fluxo de estudo do aluno.</td>
+                                <td>Execução de contrato (Art. 7º, V)</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="criancas" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">4. Proteção de crianças e adolescentes</h2>
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4 border-start border-3 border-info">
+                            <p class="mb-2">
+                                O Ritmo é uma ferramenta educacional voltada ao desenvolvimento de hábitos de
+                                estudo. Em atendimento ao Art. 14, caput da LGPD e ao Enunciado CD/ANPD nº 1/2023,
+                                o tratamento de dados de crianças (até 12 anos incompletos) e adolescentes é
+                                realizado sempre visando o seu melhor interesse.
+                            </p>
+                            <p class="mb-0">
+                                O cadastro de menores de idade pressupõe a autorização e o acompanhamento dos pais
+                                ou responsáveis legais.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="cookies" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">5. Cookies de navegação</h2>
+                    <p class="mb-0">
+                        A aplicação utiliza unicamente o cookie de sessão estritamente necessário do Spring
+                        Security (<code>JSESSIONID</code>). Este cookie é temporário, mantido apenas na memória do
+                        navegador durante a sessão autenticada, para garantir o acesso seguro às áreas restritas
+                        do sistema. Não são utilizados cookies de rastreamento, publicidade, perfilamento ou
+                        analíticos de terceiros.
+                    </p>
+                </section>
+
+                <section id="compartilhamento" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">6. Compartilhamento e transferência internacional</h2>
+                    <p>
+                        O Ritmo não comercializa nem compartilha dados pessoais com terceiros para fins de
+                        marketing. Por necessidades estritamente de infraestrutura e hospedagem em nuvem, os dados
+                        são processados pelos seguintes operadores:
+                    </p>
+                    <ul class="mb-0">
+                        <li><strong>Render Services Inc. (EUA):</strong> hospedagem do servidor de aplicação Java/Spring Boot.</li>
+                        <li><strong>Neon Inc. (EUA):</strong> banco de dados relacional PostgreSQL.</li>
+                        <li><strong>Quotable API:</strong> integração para exibição de citações motivacionais. As requisições são efetuadas pelo backend sem qualquer envio de dados pessoais dos estudantes.</li>
+                    </ul>
+                </section>
+
+                <section id="retencao" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">7. Retenção, eliminação e direito ao esquecimento</h2>
+                    <p>
+                        O estudante pode, a qualquer momento, solicitar a exclusão de sua conta no painel do
+                        perfil.
+                    </p>
+                    <div class="card border-0 shadow-sm rounded-4 mb-3">
+                        <div class="card-body p-4 border-start border-3 border-success">
+                            <p class="fw-semibold mb-1">Exclusão física em cascata</p>
+                            <p class="mb-0 text-secondary">
+                                A confirmação da exclusão remove permanentemente (<code>ON DELETE CASCADE</code>)
+                                todos os dados cadastrais, disciplinas, tópicos e histórico de estudos do banco de
+                                dados.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4 border-start border-3 border-warning">
+                            <p class="fw-semibold mb-1">Guarda legal de logs</p>
+                            <p class="mb-0 text-secondary">
+                                Em cumprimento ao Art. 15 do Marco Civil da Internet, os registros de acesso
+                                armazenados na tabela de auditoria (e-mail, IP, data e hora) serão mantidos pelo
+                                prazo legal irredutível de 6 (seis) meses, sendo descartados com segurança após
+                                este período.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="direitos" class="mb-5">
+                    <h2 class="h4 fw-bold mb-3">8. Direitos do titular</h2>
+                    <p>
+                        O titular dos dados pode solicitar confirmação de tratamento, acesso, correção ou
+                        eliminação dos seus dados enviando uma mensagem para o nosso encarregado.
+                    </p>
+                    <a href="mailto:11262401910@alunos.umc.br" class="btn btn-outline-dark rounded-pill">
+                        Falar com o encarregado de dados
+                    </a>
+                </section>
+            </article>
+
+            <hr class="my-5">
+
+            <p class="text-secondary">
+                <a th:href="@{/cadastro}">← Voltar ao cadastro</a>
+            </p>
+
+        </div>
+    </div>
+</main>
 
 </body>
 </html>
