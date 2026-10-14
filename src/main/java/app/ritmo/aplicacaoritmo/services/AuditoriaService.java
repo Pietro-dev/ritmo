@@ -22,15 +22,11 @@ public class AuditoriaService {
     @Transactional
     public void registrar(String usuarioEmail, AcaoAuditoria acao, String descricao) {
         if (acao == null) {
-            throw new NegocioException(
-                    "A ação da auditoria é obrigatória"
-            );
+            throw new NegocioException("A ação da auditoria é obrigatória");
         }
 
         if (descricao == null || descricao.isBlank()) {
-            throw new NegocioException(
-                    "A descrição da auditoria é obrigatória"
-            );
+            throw new NegocioException("A descrição da auditoria é obrigatória");
         }
 
         Auditoria auditoria = new Auditoria(normalizarEmail(usuarioEmail), acao, descricao.trim());
