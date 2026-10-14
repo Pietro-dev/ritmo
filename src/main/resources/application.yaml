@@ -48,6 +48,10 @@ spring:
         format_sql: true
   thymeleaf:
     cache: false
+
+app:
+  admin:
+    senha: ${APP_ADMIN_DEV_SENHA:123456}
 ---
 # PERFIL DE PRODUÇÃO
 spring:
@@ -66,3 +70,7 @@ spring:
     show-sql: false
   thymeleaf:
     cache: true # Mantém cache ativado para máxima performance
+
+app:
+  admin:
+    senha: ${APP_ADMIN_PROD_SENHA}

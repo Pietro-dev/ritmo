@@ -23,7 +23,7 @@ public class DataInitializer implements CommandLineRunner {
     @Value("${APP_ADMIN_NOME:admin}")
     private String adminNome;
 
-    @Value("${APP_ADMIN_SENHA:123456}")
+    @Value("${app.admin.senha}")
     private String adminSenha;
 
     @Value("${APP_ADMIN_EMAIL:admin@email.com}")
