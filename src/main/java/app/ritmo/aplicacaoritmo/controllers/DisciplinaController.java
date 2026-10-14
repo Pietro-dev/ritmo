@@ -21,6 +21,7 @@ public class DisciplinaController {
 
     @GetMapping
     public String listar(Model model) {
+        model.addAttribute("paginaAtiva", "disciplinas");
         model.addAttribute("disciplinas", service.listarDoUsuarioLogado());
         model.addAttribute("disciplinaInput", new DisciplinaInputDTO(""));
 
