@@ -18,11 +18,14 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         var usuario = securityUtils.getUsuarioLogado();
+        boolean verificaAdmin = usuario.getRole() == Role.ROLE_ADMIN;
 
+        model.addAttribute("paginaAtiva", "dashboard");
         model.addAttribute("usuario", usuario);
         model.addAttribute("ehAdmin", usuario.getRole() == Role.ROLE_ADMIN);
-        model.addAttribute("frase", fraseMotivacionalService.buscarFraseETraduzir().orElse(null));
-
+        if(!verificaAdmin) {
+            model.addAttribute("frase", fraseMotivacionalService.buscarFraseETraduzir().orElse(null));
+        }
         return "dashboard";
     }
 }
