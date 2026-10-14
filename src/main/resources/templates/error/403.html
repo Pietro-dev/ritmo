@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+a
+    <title>Acesso não permitido | Ritmo</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <link rel="icon"
+          th:href="@{/images/icons8-book-32.png}"
+          type="image/png">
+
+    <style>
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .marca {
+            flex-shrink: 0;
+        }
+
+        .area-central {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .cartao-erro {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .icone-erro {
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        @media (max-height: 600px) {
+            .area-central {
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+            }
+
+            .cartao-erro .card-body {
+                padding: 1.5rem !important;
+            }
+
+            .icone-erro {
+                width: 72px;
+                height: 72px;
+                margin-bottom: 1rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-body-tertiary">
+
+<header class="container py-3 marca">
+    <a class="navbar-brand fw-bold fs-3 text-dark text-decoration-none"
+       th:href="@{/dashboard}">
+        ritmo
+    </a>
+</header>
+
+<main class="area-central">
+
+    <section class="card cartao-erro border-0 shadow-sm rounded-4 text-center"
+             aria-labelledby="tituloErro">
+
+        <div class="card-body p-4 p-md-5">
+
+            <!-- Ícone do erro -->
+            <div class="icone-erro d-flex align-items-center justify-content-center
+                        rounded-circle bg-warning bg-opacity-10 text-warning
+                        mx-auto mb-4">
+
+                <i class="bi bi-shield-lock fs-1"
+                   aria-hidden="true"></i>
+
+            </div>
+
+            <p class="text-uppercase small fw-semibold text-secondary mb-2">
+                Erro 403
+            </p>
+
+            <h1 id="tituloErro" class="h3 fw-bold mb-3">
+                Acesso não permitido
+            </h1>
+
+            <p class="text-secondary mb-4">
+                Parece que você não tem permissão para acessar esta página.
+                Não se preocupe, você pode voltar e continuar seus estudos.
+            </p>
+
+            <!-- Botão de retorno -->
+            <a class="btn btn-primary rounded-pill px-4 py-2 fw-semibold w-100"
+               th:href="@{/dashboard}">
+
+                <i class="bi bi-arrow-left me-2"
+                   aria-hidden="true"></i>
+
+                Voltar ao início
+            </a>
+
+            <p class="text-secondary small mt-4 mb-0">
+                Ritmo • Organize seus estudos e avance no seu ritmo.
+            </p>
+
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>
