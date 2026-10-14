@@ -20,11 +20,9 @@ public class UsuarioAuthService implements UserDetailsService {
 //    converte o Usuario em User, formato que o Spring security utiliza
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByEmail(email) .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + email));
-        return new User(
-                usuario.getEmail(),
-                usuario.getSenha(),
-                Collections.singletonList(new SimpleGrantedAuthority(usuario.getRole().name()))
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + email));
+        return new User(usuario.getEmail(), usuario.getSenha(), Collections.singletonList(new SimpleGrantedAuthority(usuario.getRole().name()))
         );
     }
 }
