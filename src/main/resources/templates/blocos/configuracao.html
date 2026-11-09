@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section class="tela-disciplinas" layout:fragment="content">
+
+    <div class="py-2">
+
+        <!-- Cabeçalho Principal -->
+        <header class="mb-4 p-4 p-lg-5 rounded-4 bg-primary bg-opacity-10 border border-primary border-opacity-10">
+            <div class="d-flex align-items-center gap-3">
+                <span class="ritmo-icon-tile bg-primary text-white rounded-4 shadow-sm">
+                    <i class="bi bi-collection-play fs-3" aria-hidden="true"></i>
+                </span>
+
+                <div>
+                    <h1 class="fw-bold text-dark mb-1">Criar Bloco de Estudos</h1>
+                    <p class="text-secondary mb-0">
+                        Monte seu treino personalizado definindo a matéria, a duração e os tópicos desejados.
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Alerta de Erro -->
+        <div th:if="${erroConfiguracao != null}"
+             class="alert ritmo-alert-erro rounded-4 shadow-sm mb-4 d-flex align-items-center gap-2"
+             role="alert">
+            <i class="bi bi-exclamation-triangle-fill fs-5" aria-hidden="true"></i>
+            <span th:text="${erroConfiguracao}">Erro ao criar bloco</span>
+        </div>
+
+        <!-- Etapa 1: Seleção da Disciplina (Laranja Ritmo) -->
+        <section class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4 p-lg-5">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <span class="ritmo-icon-tile ritmo-icon-tile-sm ritmo-card-laranja rounded-3">
+                        <i class="bi bi-journal-bookmark fs-5" aria-hidden="true"></i>
+                    </span>
+                    <h2 class="h5 fw-bold mb-0">1. Escolha a Disciplina</h2>
+                </div>
+
+                <form th:action="@{/blocos/configuracao}" method="get">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+                        <div th:each="disciplina : ${disciplinas}" class="col">
+                            <input type="radio"
+                                   class="btn-check"
+                                   name="disciplinaId"
+                                   th:id="|disciplina-${disciplina.id}|"
+                                   th:value="${disciplina.id}"
+                                   th:checked="${disciplina.id == disciplinaSelecionadaId}"
+                                   onchange="this.form.submit()"
+                                   required>
+
+                            <label class="btn ritmo-btn-disciplina w-100 p-3 rounded-4 text-start h-100 d-flex align-items-center justify-content-between shadow-sm"
+                                   th:for="|disciplina-${disciplina.id}|">
+                                <span class="fw-bold fs-6 mb-0 text-truncate" th:text="${disciplina.nome}">
+                                    Disciplina
+                                </span>
+                                <i class="bi bi-chevron-right ms-2 flex-shrink-0" aria-hidden="true"></i>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Feedback: Disciplina Sem Tópicos -->
+        <div th:if="${disciplinaSelecionadaId != null and #lists.isEmpty(topicosDisponiveis)}"
+             class="alert ritmo-alert-info rounded-4 p-4 text-center mb-4 shadow-sm"
+             role="status">
+            <i class="bi bi-info-circle fs-3 d-block mb-2 text-primary" aria-hidden="true"></i>
+            <p class="mb-0 fw-medium">
+                Esta disciplina ainda não possui tópicos cadastrados para estudo.
+            </p>
+        </div>
+
+        <!-- Etapa 2: Configuração e Escolha dos Tópicos -->
+        <section th:if="${disciplinaSelecionadaId != null and !#lists.isEmpty(topicosDisponiveis)}"
+                 class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4 p-lg-5">
+                <form th:action="@{/blocos/configuracao}"
+                      th:object="${configuracaoInput}"
+                      method="post">
+
+                    <input type="hidden" th:field="*{disciplinaId}">
+
+                    <!-- Etapa 2: Duração do Bloco (Roxo Ritmo) -->
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center gap-2 mb-4">
+                            <span class="ritmo-icon-tile ritmo-icon-tile-sm ritmo-card-roxo rounded-3">
+                                <i class="bi bi-stopwatch fs-5" aria-hidden="true"></i>
+                            </span>
+                            <h2 class="h5 fw-bold mb-0">2. Duração do Bloco</h2>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-4">
+                                <input type="radio" class="btn-check" id="duracao5" th:field="*{duracaoMinutos}" value="5">
+                                <label class="btn ritmo-btn-duracao w-100 p-4 rounded-4 text-start h-100 shadow-sm" for="duracao5">
+                                    <span class="d-block fw-bold fs-4 mb-2">5 Minutos</span>
+                                    <!-- Classe badge-duracao adicionada aqui -->
+                                    <span class="badge badge-duracao fs-6 px-3 py-2 rounded-pill">5 perguntas</span>
+                                </label>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <input type="radio" class="btn-check" id="duracao15" th:field="*{duracaoMinutos}" value="15">
+                                <label class="btn ritmo-btn-duracao w-100 p-4 rounded-4 text-start h-100 shadow-sm" for="duracao15">
+                                    <span class="d-block fw-bold fs-4 mb-2">15 Minutos</span>
+                                    <span class="badge badge-duracao fs-6 px-3 py-2 rounded-pill">15 perguntas</span>
+                                </label>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <input type="radio" class="btn-check" id="duracao30" th:field="*{duracaoMinutos}" value="30">
+                                <label class="btn ritmo-btn-duracao w-100 p-4 rounded-4 text-start h-100 shadow-sm" for="duracao30">
+                                    <span class="d-block fw-bold fs-4 mb-2">30 Minutos</span>
+                                    <span class="badge badge-duracao fs-6 px-3 py-2 rounded-pill">30 perguntas</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="text-danger small mt-2" th:errors="*{duracaoMinutos}">
+                            Erro de validação
+                        </div>
+                    </div>
+
+                    <hr class="my-5 text-secondary opacity-25">
+
+                    <!-- Etapa 3: Seleção dos Tópicos (Lima & Carvão) -->
+                    <fieldset class="mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="ritmo-icon-tile ritmo-icon-tile-sm ritmo-card-lima rounded-3">
+                                <i class="bi bi-list-check fs-5" aria-hidden="true"></i>
+                            </span>
+                            <legend class="h5 fw-bold mb-0">3. Selecione os Tópicos</legend>
+                        </div>
+
+                        <div id="regraBloco"
+                             class="alert ritmo-card-creme border rounded-4 p-3 mb-4 text-secondary small d-flex gap-2"
+                             role="status"
+                             aria-live="polite">
+                            <i class="bi bi-lightbulb-fill text-warning fs-5" aria-hidden="true"></i>
+                            <span data-regra-bloco-texto>
+                                Escolha a duração e os tópicos para ver quantas perguntas cada tópico precisa ter.
+                            </span>
+                        </div>
+
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                            <div th:each="topico : ${topicosDisponiveis}" class="col">
+                                <!-- Thymeleaf gera o ID automaticamente com o th:field num loop -->
+                                <input class="btn-check"
+                                       type="checkbox"
+                                       th:field="*{topicoIds}"
+                                       th:value="${topico.id}">
+
+                                <!-- O #ids.prev captura corretamente o ID que o Thymeleaf acabou de gerar acima -->
+                                <label class="btn ritmo-btn-topico w-100 p-3 rounded-4 text-start h-100 d-flex align-items-start justify-content-between shadow-sm"
+                                       th:for="${#ids.prev('topicoIds')}">
+                                    <div class="me-2">
+                                        <span class="d-block fw-bold mb-2 lh-sm" th:text="${topico.nome}">
+                                            Tópico
+                                        </span>
+                                        <span class="badge ritmo-card-count rounded-pill"
+                                              th:text="|${topico.quantidadePerguntas} perguntas|">
+                                            0 perguntas
+                                        </span>
+                                    </div>
+                                    <i class="bi bi-check-circle-fill fs-4 status-icon ms-2" aria-hidden="true"></i>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="text-danger small mt-2" th:errors="*{topicoIds}">
+                            Erro de validação
+                        </div>
+                    </fieldset>
+
+                    <!-- Botão Principal de Criação -->
+                    <div class="pt-4">
+                        <button class="btn btn-ritmo-primary btn-lg rounded-pill px-5 fw-bold shadow"
+                                type="submit">
+                            <i class="bi bi-play-circle-fill me-2" aria-hidden="true"></i>
+                            Criar Bloco de Estudos
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Resumo do Bloco Criado -->
+        <section th:if="${blocoConfigurado != null}"
+                 class="card border-0 shadow-lg rounded-4 ritmo-card-roxo overflow-hidden">
+            <div class="card-body p-4 p-lg-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <span class="ritmo-icon-tile rounded-circle ritmo-card-count">
+                        <i class="bi bi-check-lg fs-3" aria-hidden="true"></i>
+                    </span>
+                    <div>
+                        <h2 class="h4 fw-bold mb-0 text-white">Bloco Criado com Sucesso!</h2>
+                        <p class="text-white-50 mb-0 small">Pronto para iniciar a sua sessão de estudos.</p>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-sm-4">
+                        <div class="ritmo-card-carvao p-3 rounded-4 text-center shadow-sm h-100">
+                            <span class="d-block display-5 fw-bold text-lima mb-1"
+                                  th:text="${blocoConfigurado.duracaoMinutos}">5</span>
+                            <span class="small fw-semibold text-uppercase text-white-50">Minutos</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <div class="ritmo-card-carvao p-3 rounded-4 text-center shadow-sm h-100">
+                            <span class="d-block display-5 fw-bold text-lima mb-1"
+                                  th:text="${blocoConfigurado.quantidadePerguntas}">5</span>
+                            <span class="small fw-semibold text-uppercase text-white-50">Perguntas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="h6 fw-bold mb-3 text-uppercase text-white-50" style="letter-spacing: 1px;">Tópicos Selecionados:</h3>
+                <div class="row g-2">
+                    <div th:each="topico : ${blocoConfigurado.topicos}" class="col-12">
+                        <div class="ritmo-card-creme p-3 rounded-3 d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-dark" th:text="${topico.nome}">Tópico</span>
+                            <div class="d-flex gap-2 align-items-center">
+                                <span class="badge bg-primary rounded-pill px-3 py-2"
+                                      th:text="|${topico.perguntasNoBloco} no bloco|">
+                                    0 no bloco
+                                </span>
+                                <span class="badge bg-dark rounded-pill px-3 py-2"
+                                      th:text="|${topico.perguntasDisponiveis} disp.|">
+                                    0 disp.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+</html>

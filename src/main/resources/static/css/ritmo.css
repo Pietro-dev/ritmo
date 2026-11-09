@@ -1,0 +1,787 @@
+:root {
+    --ritmo-lima: #DAFF02;
+    --ritmo-laranja: #FE572A;
+    --ritmo-roxo: #685BC7;
+    --ritmo-creme: #F3F0EB;
+    --ritmo-carvao: #201E1F;
+
+    --bs-body-font-family: "Roboto", sans-serif;
+    --bs-body-color: var(--ritmo-carvao);
+    --bs-body-bg: var(--ritmo-creme);
+    --bs-heading-color: var(--ritmo-carvao);
+    --bs-emphasis-color: var(--ritmo-carvao);
+    --bs-secondary-color: rgba(32, 30, 31, 0.75);
+    --bs-tertiary-bg: var(--ritmo-creme);
+    --bs-border-color: #dfd9d0;
+
+    --bs-primary: var(--ritmo-roxo);
+    --bs-primary-rgb: 104, 91, 199;
+    --bs-primary-text-emphasis: #3c317e;
+    --bs-primary-bg-subtle: #ebe8ff;
+    --bs-primary-border-subtle: #b7afe9;
+
+    --bs-secondary: var(--ritmo-carvao);
+    --bs-secondary-rgb: 32, 30, 31;
+
+    --bs-success: var(--ritmo-lima);
+    --bs-success-rgb: 218, 255, 2;
+    --bs-success-text-emphasis: var(--ritmo-carvao);
+    --bs-success-bg-subtle: #f2ffc2;
+    --bs-success-border-subtle: #d5ee70;
+
+    --bs-warning: var(--ritmo-laranja);
+    --bs-warning-rgb: 254, 87, 42;
+    --bs-warning-text-emphasis: #a6361c;
+    --bs-warning-bg-subtle: #ffded5;
+    --bs-warning-border-subtle: #f5aa96;
+
+    --bs-danger: var(--ritmo-laranja);
+    --bs-danger-rgb: 254, 87, 42;
+    --bs-danger-text-emphasis: #a6361c;
+    --bs-danger-bg-subtle: #ffded5;
+    --bs-danger-border-subtle: #f5aa96;
+
+    --bs-info: var(--ritmo-creme);
+    --bs-info-rgb: 243, 240, 235;
+    --bs-info-text-emphasis: var(--ritmo-carvao);
+    --bs-info-bg-subtle: #f3f0eb;
+    --bs-info-border-subtle: #dfd9d0;
+
+    --bs-light: var(--ritmo-creme);
+    --bs-light-rgb: 243, 240, 235;
+    --bs-dark: var(--ritmo-carvao);
+    --bs-dark-rgb: 32, 30, 31;
+    --bs-link-color: var(--ritmo-roxo);
+    --bs-link-hover-color: #5144b0;
+    --bs-card-bg: #ffffff;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.display-1, .display-2, .display-3, .display-4, .display-5, .display-6,
+.navbar-brand,
+.marca a,
+.marca-app {
+    font-family: "Raleway", sans-serif;
+}
+
+.text-bg-success,
+.text-bg-warning,
+.text-bg-danger,
+.text-bg-info {
+    color: var(--ritmo-carvao) !important;
+}
+
+.ritmo-navbar {
+    background-color: var(--ritmo-carvao);
+    box-shadow: 0 0.25rem 1rem rgba(32, 30, 31, 0.12);
+}
+
+.ritmo-navbar .navbar-brand {
+    color: var(--ritmo-lima);
+    letter-spacing: -0.04em;
+}
+
+.ritmo-navbar .navbar-brand:hover,
+.ritmo-navbar .navbar-brand:focus {
+    color: #ffffff;
+}
+
+.ritmo-navbar .nav-link {
+    color: #ffffff;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: color 160ms ease, background-color 160ms ease;
+}
+
+.ritmo-navbar .nav-link:hover,
+.ritmo-navbar .nav-link:focus-visible {
+    color: var(--ritmo-carvao) !important;
+    background-color: var(--ritmo-creme);
+}
+
+.ritmo-navbar .nav-link.active,
+.ritmo-navbar .nav-link.active:hover {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-lima);
+}
+
+.ritmo-navbar .btn-outline-light {
+    --bs-btn-color: #ffffff;
+    --bs-btn-border-color: rgba(255, 255, 255, 0.65);
+    --bs-btn-hover-color: var(--ritmo-carvao);
+    --bs-btn-hover-bg: var(--ritmo-lima);
+    --bs-btn-hover-border-color: var(--ritmo-lima);
+}
+
+.ritmo-footer {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-creme);
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.auth-page .auth-aside {
+    color: var(--ritmo-creme);
+    background: var(--ritmo-roxo);
+    background-image: none;
+}
+
+.auth-page .auth-aside .marca-app {
+    color: var(--ritmo-lima);
+}
+
+.ritmo-auth-foreground {
+    color: var(--ritmo-creme);
+}
+
+.ritmo-auth-link {
+    color: var(--ritmo-lima);
+}
+
+.ritmo-auth-link:hover,
+.ritmo-auth-link:focus-visible {
+    color: var(--ritmo-laranja);
+}
+
+.ritmo-auth-muted {
+    color: rgba(243, 240, 235, 0.75);
+}
+
+.ritmo-quote {
+    padding: 1.5rem;
+    color: var(--ritmo-creme);
+    background-color: var(--ritmo-carvao);
+    border: 1px solid rgba(243, 240, 235, 0.12);
+    border-left: 0.3rem solid var(--ritmo-lima);
+    border-radius: 1rem;
+    box-shadow: 0 0.75rem 1.75rem rgba(32, 30, 31, 0.14);
+}
+
+.ritmo-quote-label {
+    color: var(--ritmo-lima);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.ritmo-quote-text {
+    color: var(--ritmo-creme);
+    font-family: "Raleway", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.55;
+}
+
+.ritmo-quote-author {
+    color: rgba(243, 240, 235, 0.7);
+    font-size: 0.875rem;
+}
+
+.auth-page,
+.auth-page .container-fluid {
+    color: var(--ritmo-carvao);
+    background: var(--ritmo-creme);
+}
+
+.auth-page .auth-main {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-creme);
+}
+
+.auth-main h1 {
+    letter-spacing: -0.035em;
+}
+
+.auth-page .auth-main .form-control:focus,
+.auth-page .auth-main .form-check-input:focus {
+    border-color: var(--ritmo-roxo);
+    box-shadow: 0 0 0 0.2rem var(--ritmo-roxo);
+}
+
+.auth-page .auth-main .form-check-input:checked {
+    background-color: var(--ritmo-roxo);
+    border-color: var(--ritmo-roxo);
+}
+
+.auth-page .auth-main .invalid-feedback {
+    color: var(--ritmo-laranja);
+}
+
+.auth-page .auth-main a {
+    color: var(--ritmo-roxo);
+}
+
+.auth-page .auth-main a:hover,
+.auth-page .auth-main a:focus-visible {
+    color: var(--ritmo-laranja);
+}
+
+.auth-page .auth-main .btn-outline-secondary {
+    color: var(--ritmo-roxo);
+    border-color: var(--ritmo-roxo);
+}
+
+.auth-page .auth-main .btn-outline-secondary:hover,
+.auth-page .auth-main .btn-outline-secondary:focus-visible {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-lima);
+    border-color: var(--ritmo-lima);
+}
+
+.ritmo-auth-accent {
+    border-color: var(--ritmo-laranja) !important;
+}
+
+.ritmo-auth-grid > div {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.ritmo-auth-grid > div > div {
+    flex: 1 1 0;
+    border-radius: 0.2rem;
+}
+
+.ritmo-grid-vazio {
+    background-color: rgba(243, 240, 235, 0.32);
+}
+
+.ritmo-grid-laranja {
+    background-color: var(--ritmo-laranja);
+}
+
+.ritmo-grid-roxo {
+    background-color: var(--ritmo-roxo);
+}
+
+.ritmo-grid-lima {
+    background-color: var(--ritmo-lima);
+}
+
+.ritmo-auth-badge {
+    color: var(--ritmo-carvao);
+}
+
+.ritmo-auth-badge-laranja {
+    background-color: var(--ritmo-laranja);
+}
+
+.ritmo-auth-badge-creme {
+    background-color: var(--ritmo-creme);
+}
+
+.ritmo-auth-badge-lima {
+    background-color: var(--ritmo-lima);
+}
+
+.ritmo-alert-erro {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-laranja);
+    border-color: var(--ritmo-laranja);
+}
+
+.ritmo-alert-info {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-creme);
+    border-color: var(--ritmo-carvao);
+}
+
+.ritmo-alert-sucesso {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-lima);
+    border-color: var(--ritmo-lima);
+}
+
+.btn-ritmo-primary {
+    --bs-btn-color: #ffffff;
+    --bs-btn-bg: var(--ritmo-roxo);
+    --bs-btn-border-color: var(--ritmo-roxo);
+    --bs-btn-hover-color: var(--ritmo-carvao);
+    --bs-btn-hover-bg: var(--ritmo-lima);
+    --bs-btn-hover-border-color: var(--ritmo-lima);
+    --bs-btn-active-color: var(--ritmo-creme);
+    --bs-btn-active-bg: var(--ritmo-carvao);
+    --bs-btn-active-border-color: var(--ritmo-carvao);
+    --bs-btn-disabled-color: #ffffff;
+    --bs-btn-disabled-bg: var(--ritmo-roxo);
+    --bs-btn-disabled-border-color: var(--ritmo-roxo);
+}
+
+.ritmo-dashboard-icon {
+    flex: 0 0 3.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.5rem;
+}
+
+.ritmo-dashboard-link {
+    color: var(--ritmo-carvao);
+    background-color: #ffffff;
+    border: 1px solid var(--ritmo-carvao);
+    transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+
+.ritmo-dashboard-link:hover,
+.ritmo-dashboard-link:focus-visible {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-lima);
+    border-color: var(--ritmo-lima);
+}
+
+.ritmo-progress-easy,
+.ritmo-progress-hard {
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.ritmo-progress-missed {
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.ritmo-progress-easy {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-lima) !important;
+}
+
+.ritmo-progress-hard {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-laranja) !important;
+}
+
+.ritmo-progress-missed {
+    color: #ffffff;
+    background-color: var(--ritmo-roxo) !important;
+}
+
+.ritmo-legend-easy {
+    background-color: var(--ritmo-lima);
+}
+
+.ritmo-legend-hard {
+    background-color: var(--ritmo-laranja);
+}
+
+.ritmo-legend-missed {
+    background-color: var(--ritmo-roxo);
+}
+
+.ritmo-dashboard-progress {
+    width: 100%;
+    height: 1.5rem;
+}
+
+.ritmo-admin-activity-bar {
+    height: 0.55rem;
+    background-color: var(--ritmo-creme);
+}
+
+.ritmo-admin-signups {
+    background-color: var(--ritmo-lima);
+}
+
+.ritmo-admin-sessions {
+    background-color: var(--ritmo-roxo);
+}
+
+.ritmo-admin-content-alert {
+    color: var(--ritmo-carvao);
+    background-color: rgba(218, 255, 2, 0.22);
+    border: 1px solid rgba(32, 30, 31, 0.12);
+}
+
+.ritmo-icon-tile {
+    display: inline-flex;
+    flex: 0 0 3rem;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+}
+
+.ritmo-icon-tile-sm {
+    flex-basis: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.ritmo-icon-tile-lg {
+    flex-basis: 4rem;
+    width: 4rem;
+    height: 4rem;
+}
+
+.ritmo-icon-tile-question {
+    flex-basis: 2.25rem;
+    width: 2.25rem;
+    height: 2.25rem;
+}
+
+.ritmo-color-card {
+    border: 0;
+}
+
+.ritmo-card-roxo {
+    color: #ffffff;
+    background-color: var(--ritmo-roxo);
+}
+
+.ritmo-card-lima {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-lima);
+}
+
+.ritmo-card-creme {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-creme);
+}
+
+.ritmo-card-laranja {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-laranja);
+}
+
+.ritmo-card-carvao {
+    color: #ffffff;
+    background-color: var(--ritmo-carvao);
+}
+
+.ritmo-color-card h3,
+.ritmo-color-card p {
+    color: inherit;
+}
+
+.ritmo-color-card .text-secondary,
+.ritmo-color-card .dropdown .btn-link {
+    color: inherit !important;
+}
+
+.ritmo-color-card .text-secondary {
+    opacity: 0.82;
+}
+
+.ritmo-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+    color: var(--ritmo-carvao);
+    background-color: rgba(255, 255, 255, 0.88);
+}
+
+.ritmo-card-count {
+    color: var(--ritmo-lima);
+    background-color: var(--ritmo-carvao);
+}
+
+.ritmo-card-carvao .ritmo-card-count {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-lima);
+}
+
+.ritmo-card-action {
+    color: var(--ritmo-carvao) !important;
+    background-color: #ffffff;
+    border-color: #ffffff;
+    font-weight: 600;
+    transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.ritmo-card-action:hover,
+.ritmo-card-action:focus-visible,
+.ritmo-card-action:active {
+    color: var(--ritmo-carvao) !important;
+    background-color: var(--ritmo-creme) !important;
+    border-color: var(--ritmo-creme) !important;
+}
+
+.ritmo-card-action:focus-visible {
+    outline: 3px solid var(--ritmo-carvao);
+    outline-offset: 2px;
+}
+
+.ritmo-card-delete {
+    border-color: rgba(32, 30, 31, 0.24);
+}
+
+.ritmo-card-delete:hover,
+.ritmo-card-delete:focus-visible {
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+.ritmo-card-menu-toggle {
+    display: inline-flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: inherit;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background-color: transparent;
+}
+
+.ritmo-card-menu-toggle:hover,
+.ritmo-card-menu-toggle:focus-visible,
+.ritmo-card-menu-toggle[aria-expanded="true"] {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-lima);
+    border-color: var(--ritmo-lima);
+}
+
+.ritmo-dropdown-delete {
+    color: var(--ritmo-carvao);
+}
+
+.ritmo-dropdown-delete i {
+    color: var(--ritmo-laranja);
+}
+
+.ritmo-dropdown-delete:hover,
+.ritmo-dropdown-delete:focus-visible {
+    color: var(--ritmo-carvao);
+    background-color: var(--ritmo-creme);
+}
+
+details > summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Ajustes usados pelas listas de disciplinas, tópicos e perguntas. */
+.tela-disciplinas .bi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    min-width: 1em;
+    height: 1em;
+    flex: 0 0 1em;
+    line-height: 1;
+    font-style: normal;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.tela-disciplinas .icon-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+    padding: 0 !important;
+    flex: 0 0 3rem;
+}
+
+.tela-disciplinas .icon-tile .bi {
+    flex: 0 0 auto;
+}
+
+.tela-disciplinas .icon-tile-sm {
+    width: 2.5rem;
+    height: 2.5rem;
+    min-width: 2.5rem;
+    flex-basis: 2.5rem;
+}
+
+.tela-disciplinas .icon-tile-lg {
+    width: 5rem;
+    height: 5rem;
+    min-width: 5rem;
+    flex-basis: 5rem;
+}
+
+.tela-disciplinas .disciplina-dot {
+    display: inline-block;
+    width: 0.625rem;
+    height: 0.625rem;
+    min-width: 0.625rem;
+    padding: 0;
+    flex: 0 0 0.625rem;
+}
+
+.icone-40, .icone-44, .icone-48, .icone-60, .icone-64, .icone-88 {
+    flex: 0 0 auto;
+}
+
+.icone-40 { width: 40px; height: 40px; }
+.icone-44 { width: 44px; height: 44px; }
+.icone-48 { width: 48px; height: 48px; }
+.icone-60 { width: 60px; height: 60px; }
+.icone-64 { width: 64px; height: 64px; }
+.icone-88 { width: 88px; height: 88px; }
+
+.texto-preservado {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.erro-cartao {
+    max-width: 500px;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.marca {
+    flex-shrink: 0;
+}
+
+.area-central {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.cartao-erro {
+    width: 100%;
+    max-width: 520px;
+}
+
+.icone-erro {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+@media (max-height: 600px) {
+    .area-central {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .cartao-erro .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .icone-erro {
+        width: 72px;
+        height: 72px;
+        margin-bottom: 1rem !important;
+    }
+}
+
+/* ==========================================================================
+   SELETORES CUSTOMIZADOS - CRIAÇÃO DE BLOCO DE ESTUDOS
+   ========================================================================== */
+
+.text-lima {
+    color: var(--ritmo-lima) !important;
+}
+
+/* 1. Botões de Disciplina (Paleta Laranja Ritmo) */
+.ritmo-btn-disciplina {
+    background-color: #ffffff;
+    color: var(--ritmo-carvao);
+    border: 2px solid var(--bs-border-color);
+    transition: all 180ms ease;
+}
+
+.ritmo-btn-disciplina:hover {
+    background-color: var(--ritmo-creme);
+    border-color: var(--ritmo-laranja);
+}
+
+.btn-check:checked + .ritmo-btn-disciplina {
+    background-color: var(--ritmo-laranja);
+    color: #ffffff;
+    border-color: var(--ritmo-laranja);
+    box-shadow: 0 0.25rem 0.75rem rgba(254, 87, 42, 0.35);
+}
+
+/* 2. Botões de Duração (Paleta Roxo Ritmo) */
+.ritmo-btn-duracao {
+    background-color: #ffffff;
+    color: var(--ritmo-carvao);
+    border: 2px solid var(--bs-border-color);
+    transition: all 180ms ease;
+}
+
+.ritmo-btn-duracao:hover {
+    background-color: var(--ritmo-creme);
+    border-color: var(--ritmo-roxo);
+}
+
+.btn-check:checked + .ritmo-btn-duracao {
+    background-color: var(--ritmo-roxo);
+    color: #ffffff;
+    border-color: var(--ritmo-roxo);
+    box-shadow: 0 0.25rem 0.75rem rgba(104, 91, 199, 0.35);
+}
+
+/* 3. Botões de Tópicos (Paleta Lima & Carvão) */
+.ritmo-btn-topico {
+    background-color: #ffffff;
+    color: var(--ritmo-carvao);
+    border: 2px solid var(--bs-border-color);
+    transition: all 180ms ease;
+}
+
+.ritmo-btn-topico .status-icon {
+    opacity: 0.2;
+    transition: opacity 180ms ease;
+}
+
+.ritmo-btn-topico:hover {
+    background-color: var(--ritmo-creme);
+    border-color: var(--ritmo-lima);
+}
+
+.btn-check:checked ~ .ritmo-btn-topico {
+    background-color: var(--ritmo-carvao);
+    color: var(--ritmo-lima);
+    border-color: var(--ritmo-lima);
+    box-shadow: 0 0.25rem 0.75rem rgba(32, 30, 31, 0.3);
+}
+
+.btn-check:checked ~ .ritmo-btn-topico .status-icon {
+    opacity: 1;
+    color: var(--ritmo-lima);
+}
+
+.ritmo-btn-duracao .badge-duracao {
+    background-color: rgba(32, 30, 31, 0.08); /* Cinza clarinho neutro */
+    color: var(--ritmo-carvao);
+    transition: all 180ms ease;
+}
+
+.btn-check:checked + .ritmo-btn-duracao .badge-duracao {
+    background-color: var(--ritmo-lima);
+    color: var(--ritmo-carvao);
+}
+
+.btn-check:checked ~ .ritmo-btn-topico .ritmo-card-count {
+    background-color: rgba(255, 255, 255, 0.15); /* Fica transparente para não sumir no Carvão */
+    color: var(--ritmo-lima);
+}

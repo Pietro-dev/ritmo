@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section class="tela-sessao-resumo" layout:fragment="content">
+
+    <div class="py-2">
+
+        <!-- Cabeçalho Principal -->
+        <header class="mb-4 p-4 p-lg-5 rounded-4 bg-primary bg-opacity-10 border border-primary border-opacity-10">
+            <div class="d-flex align-items-center gap-3">
+                <span class="ritmo-icon-tile bg-primary text-white rounded-4 shadow-sm">
+                    <i class="bi bi-rocket-takeoff fs-3" aria-hidden="true"></i>
+                </span>
+
+                <div>
+                    <h1 class="fw-bold text-dark mb-1"
+                        th:text="${sessao.status.name() == 'CONCLUIDA' ? 'Sessão concluída' : (sessao.tipo.name() == 'REVISAO' ? 'Bloco de revisão pronto' : 'Bloco de estudos pronto')}">
+                        Bloco pronto para iniciar
+                    </h1>
+                    <p class="text-secondary mb-0" th:if="${sessao.status.name() == 'PENDENTE'}">
+                        Confira o resumo e comece quando estiver preparado. Se interromper ou o tempo terminar, suas respostas serão apagadas e o bloco poderá ser reiniciado.
+                    </p>
+                    <p class="text-secondary mb-0" th:if="${sessao.status.name() == 'EM_ANDAMENTO'}">
+                        Este bloco já foi iniciado. Continue de onde parou.
+                    </p>
+                    <p class="text-secondary mb-0" th:if="${sessao.status.name() == 'CONCLUIDA'}">
+                        Você respondeu e se autoavaliou em todas as perguntas deste bloco.
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Card Principal de Resumo -->
+        <section class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+            <div class="card-body p-4 p-lg-5">
+
+                <!-- Status da Sessão -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h5 fw-bold mb-0 text-dark"
+                        th:text="${sessao.tipo.name() == 'REVISAO'} ? 'Resumo da revisão' : 'Resumo da sessão'">Resumo da Sessão</h2>
+                    <span class="badge text-uppercase px-3 py-2 rounded-pill fs-6 shadow-sm"
+                          th:classappend="${sessao.status.name() == 'PENDENTE'} ? 'bg-warning text-dark' : (${sessao.status.name() == 'EM_ANDAMENTO'} ? 'bg-info text-dark' : 'bg-primary text-white')">
+                        <i class="bi bi-hourglass-split me-1" th:if="${sessao.status.name() == 'PENDENTE'}" aria-hidden="true"></i>
+                        <span th:text="${sessao.status.name()}">PENDENTE</span>
+                    </span>
+                </div>
+
+                <!-- Métricas de Destaque -->
+                <div class="row g-3 mb-5">
+                    <div class="col-6">
+                        <div class="ritmo-card-carvao p-4 rounded-4 text-center shadow-sm h-100 d-flex flex-column justify-content-center">
+                            <span class="d-block display-3 fw-bold text-lima mb-1 lh-1" th:text="${sessao.duracaoMinutos}">5</span>
+                            <span class="small fw-bold text-uppercase text-white-50 tracking-wider">Minutos</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="ritmo-card-carvao p-4 rounded-4 text-center shadow-sm h-100 d-flex flex-column justify-content-center">
+                            <span class="d-block display-3 fw-bold text-lima mb-1 lh-1" th:text="${sessao.quantidadePerguntas}">5</span>
+                            <span class="small fw-bold text-uppercase text-white-50 tracking-wider">Perguntas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Tópicos -->
+                <h3 class="h6 fw-bold mb-3 text-uppercase text-secondary" style="letter-spacing: 1px;">Tópicos</h3>
+                <div class="row g-3 mb-5">
+                    <div th:each="topico : ${sessao.topicos}" class="col-12 col-md-6">
+                        <div class="ritmo-card-creme p-3 rounded-4 d-flex justify-content-between align-items-center shadow-sm border border-secondary-subtle h-100">
+                            <span class="fw-bold text-dark text-truncate me-3" th:text="${topico.nome}">Tópico</span>
+                            <span class="badge bg-primary rounded-pill px-3 py-2 flex-shrink-0">
+                                <span th:text="${topico.quantidadePerguntas}">5</span> perg.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão de Ação -->
+                <hr class="my-4 text-secondary opacity-25">
+
+                <div class="text-center pt-2" th:if="${sessao.status.name() == 'PENDENTE'}">
+                    <form th:action="@{/sessoes/{id}/iniciar(id=${sessao.id})}" method="post">
+                        <button class="btn btn-ritmo-primary btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg w-100 w-sm-auto d-inline-flex align-items-center justify-content-center"
+                                type="submit"
+                                style="font-size: 1.15rem; transition: transform 0.2s ease;">
+                            <i class="bi bi-play-fill fs-3 me-2" aria-hidden="true"></i>
+                            <span th:text="${sessao.tipo.name() == 'REVISAO'} ? 'Iniciar bloco de revisão' : 'Iniciar bloco de estudos'">
+                                Iniciar bloco de estudos
+                            </span>
+                        </button>
+                    </form>
+                </div>
+                <div class="text-center pt-2" th:if="${sessao.status.name() == 'EM_ANDAMENTO'}">
+                    <a class="btn btn-ritmo-primary btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg"
+                       th:href="@{/sessoes/{id}/pergunta(id=${sessao.id})}">
+                        <i class="bi bi-play-fill fs-3 me-2" aria-hidden="true"></i>
+                        Continuar sessão
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+</section>
+</html>
