@@ -7,11 +7,12 @@ import app.ritmo.aplicacaoritmo.exceptions.NegocioException;
 import app.ritmo.aplicacaoritmo.repositories.AuditoriaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,12 @@ public class AuditoriaService {
     }
 
     @Transactional
-    public List<AuditoriaOutputDTO> pesquisar(String email, LocalDate inicio, LocalDate fim) {
+    public Page<AuditoriaOutputDTO> pesquisar(
+            String email,
+            LocalDate inicio,
+            LocalDate fim,
+            Pageable pageable
+    ) {
         LocalDateTime inicioDateTime = null;
         LocalDateTime fimDateTime = null;
         if (inicio != null && fim != null && inicio.isAfter(fim)) {
@@ -52,10 +58,8 @@ public class AuditoriaService {
 
         String emailNormalizado = normalizarEmail(email);
 
-        return repository.pesquisar(emailNormalizado, inicioDateTime, fimDateTime)
-                .stream()
-                .map(AuditoriaOutputDTO::fromEntity)
-                .toList();
+        return repository.pesquisar(emailNormalizado, inicioDateTime, fimDateTime, pageable)
+                .map(AuditoriaOutputDTO::fromEntity);
     }
 
     private String normalizarEmail(String email) {

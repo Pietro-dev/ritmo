@@ -1,11 +1,13 @@
 package app.ritmo.aplicacaoritmo.controllers;
 
 import app.ritmo.aplicacaoritmo.domain.Role;
+import app.ritmo.aplicacaoritmo.domain.AcaoAuditoria;
 import app.ritmo.aplicacaoritmo.domain.StatusCadastro;
 import app.ritmo.aplicacaoritmo.domain.Usuario;
 import app.ritmo.aplicacaoritmo.dto.UsuarioInputDTO;
 import app.ritmo.aplicacaoritmo.repositories.UsuarioRepository;
 import app.ritmo.aplicacaoritmo.services.FraseMotivacionalService;
+import app.ritmo.aplicacaoritmo.services.AuditoriaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,8 @@ public class AuthController {
     PasswordEncoder encoder;
     @Autowired
     private FraseMotivacionalService fraseMotivacionalService;
+    @Autowired
+    private AuditoriaService auditoriaService;
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -53,6 +57,11 @@ public class AuthController {
 
         Usuario novoUsuario = new Usuario(dto.nome(), dto.email(), encoder.encode(dto.senha()), Role.ROLE_ESTUDANTE, StatusCadastro.ATIVO, LocalDateTime.now());
         usuarioRepository.save(novoUsuario);
+        auditoriaService.registrar(
+                novoUsuario.getEmail(),
+                AcaoAuditoria.CRIAR_CONTA,
+                "Criou uma conta de estudante."
+        );
         return "redirect:/login?cadastrado=true";
     }
 

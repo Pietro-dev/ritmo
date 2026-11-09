@@ -89,7 +89,7 @@
                 </thead>
 
                 <tbody>
-                <tr th:each="auditoria : ${auditorias}">
+                <tr th:each="auditoria : ${auditorias.content}">
                     <td th:text="${#temporals.format(
                             auditoria.dataHora,
                             'dd/MM/yyyy HH:mm:ss'
@@ -113,7 +113,7 @@
                     </td>
                 </tr>
 
-                <tr th:if="${#lists.isEmpty(auditorias)}">
+                <tr th:if="${auditorias.empty}">
                     <td colspan="4"
                         class="text-center text-muted py-5">
                         Nenhum registro encontrado.
@@ -122,6 +122,25 @@
                 </tbody>
             </table>
         </div>
+
+        <nav th:if="${auditorias.totalPages > 1}"
+             class="card-footer bg-white d-flex justify-content-between align-items-center"
+             aria-label="Paginação das auditorias">
+            <a class="btn btn-sm btn-outline-secondary"
+               th:if="${auditorias.hasPrevious()}"
+               th:href="@{/admin/auditorias(page=${auditorias.number - 1},email=${email},inicio=${inicio},fim=${fim})}">
+                Anterior
+            </a>
+            <span class="text-secondary small"
+                  th:text="'Página ' + (${auditorias.number} + 1) + ' de ' + ${auditorias.totalPages}">
+                Página 1 de 1
+            </span>
+            <a class="btn btn-sm btn-outline-secondary"
+               th:if="${auditorias.hasNext()}"
+               th:href="@{/admin/auditorias(page=${auditorias.number + 1},email=${email},inicio=${inicio},fim=${fim})}">
+                Próxima
+            </a>
+        </nav>
     </div>
 
 </section>
