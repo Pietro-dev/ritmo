@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section layout:fragment="content">
+
+    <!-- Cabeçalho -->
+    <header class="mb-4">
+
+        <a class="text-decoration-none text-primary fw-semibold"
+           th:href="@{/disciplinas/{disciplinaId}/topicos(disciplinaId=${disciplina.id})}">
+            <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
+            Voltar aos tópicos
+        </a>
+
+        <div class="d-flex align-items-center gap-3 mt-3">
+            <span class="d-inline-flex align-items-center justify-content-center
+                         rounded-4 bg-primary bg-opacity-10 text-primary flex-shrink-0 ritmo-icon-tile-lg">
+                <i class="bi bi-card-text fs-2" aria-hidden="true"></i>
+            </span>
+
+            <div>
+                <h1 class="h2 fw-bold mb-1">Perguntas</h1>
+                <p class="text-secondary mb-0">
+                    <span th:text="${disciplina.nome}">Disciplina</span>
+                    <i class="bi bi-chevron-right mx-1 small"
+                       aria-hidden="true"></i>
+                    <span class="fw-semibold text-body"
+                          th:text="${topico.nome}">Tópico</span>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <div class="row g-4">
+
+        <!-- Cadastro de pergunta -->
+        <div class="col-12 col-lg-5">
+            <section class="card border-0 shadow-sm rounded-4"
+                     aria-labelledby="tituloNovaPergunta">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <span class="d-inline-flex align-items-center justify-content-center
+                                     rounded-3 bg-primary bg-opacity-10 text-primary flex-shrink-0 ritmo-icon-tile">
+                            <i class="bi bi-plus-circle fs-4"
+                               aria-hidden="true"></i>
+                        </span>
+
+                        <div>
+                            <h2 id="tituloNovaPergunta" class="h5 fw-bold mb-1">
+                                Nova pergunta
+                            </h2>
+                            <p class="small text-secondary mb-0">
+                                Cadastre uma questão e sua resposta esperada.
+                            </p>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/disciplinas/{disciplinaId}/topicos/{topicoId}/perguntas(
+                                disciplinaId=${disciplina.id},
+                                topicoId=${topico.id})}"
+                          th:object="${perguntaInput}"
+                          method="post">
+
+                        <div class="mb-3">
+                            <label for="enunciado" class="form-label fw-semibold">
+                                Enunciado
+                            </label>
+
+                            <textarea id="enunciado"
+                                      th:field="*{enunciado}"
+                                      th:errorclass="is-invalid"
+                                      class="form-control rounded-3"
+                                      rows="4"
+                                      placeholder="Escreva a pergunta que você deverá responder durante os estudos."
+                                      required></textarea>
+
+                            <div class="invalid-feedback"
+                                 th:errors="*{enunciado}">
+                                Erro de validação
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="gabarito" class="form-label fw-semibold">
+                                Resposta esperada (gabarito)
+                            </label>
+
+                            <textarea id="gabarito"
+                                      th:field="*{gabarito}"
+                                      th:errorclass="is-invalid"
+                                      class="form-control rounded-3"
+                                      rows="4"
+                                      placeholder="Registre os pontos principais da resposta correta."
+                                      required></textarea>
+
+                            <div class="invalid-feedback"
+                                 th:errors="*{gabarito}">
+                                Erro de validação
+                            </div>
+
+                            <div class="form-text">
+                                O gabarito poderá ser consultado quando você revisar a pergunta.
+                            </div>
+                        </div>
+
+                        <button class="btn btn-ritmo-primary rounded-pill w-100 py-2 fw-semibold"
+                                type="submit">
+                            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+                            Adicionar pergunta
+                        </button>
+                    </form>
+
+                </div>
+            </section>
+        </div>
+
+        <!-- Lista de perguntas -->
+        <div class="col-12 col-lg-7">
+            <section class="card border-0 shadow-sm rounded-4"
+                     aria-labelledby="tituloListaPerguntas">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex align-items-center justify-content-between
+                                flex-wrap gap-2 mb-4">
+
+                        <div>
+                            <h2 id="tituloListaPerguntas" class="h5 fw-bold mb-1">
+                                Perguntas cadastradas
+                            </h2>
+                            <p class="small text-secondary mb-0">
+                                Consulte e gerencie suas questões.
+                            </p>
+                        </div>
+
+                        <span class="badge rounded-pill bg-primary bg-opacity-10
+                                     text-primary px-3 py-2"
+                              th:text="${#lists.size(perguntas)} + ' pergunta(s)'">
+                            0 pergunta(s)
+                        </span>
+                    </div>
+
+                    <!-- Estado vazio -->
+                    <div th:if="${#lists.isEmpty(perguntas)}"
+                         class="text-center py-5">
+
+                        <span class="d-inline-flex align-items-center justify-content-center
+                                     rounded-circle bg-primary bg-opacity-10 text-primary mb-3 ritmo-icon-tile-lg">
+                            <i class="bi bi-patch-question fs-1"
+                               aria-hidden="true"></i>
+                        </span>
+
+                        <h3 class="h5 fw-bold mb-2">
+                            Nenhuma pergunta cadastrada
+                        </h3>
+
+                        <p class="text-secondary mb-1">
+                            Este tópico ainda não possui perguntas.
+                        </p>
+
+                        <p class="text-secondary small mb-0">
+                            Adicione uma questão para começar a organizar sua revisão.
+                        </p>
+                    </div>
+
+                    <!-- Perguntas cadastradas -->
+                    <div th:unless="${#lists.isEmpty(perguntas)}">
+
+                        <article class="border rounded-4 p-3 p-md-4 mb-3"
+                                 th:each="pergunta, status : ${perguntas}">
+
+                            <div class="d-flex flex-wrap justify-content-between
+                                        align-items-start gap-3 mb-3">
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="d-inline-flex align-items-center justify-content-center
+                                                 rounded-3 bg-primary bg-opacity-10 text-primary fw-bold flex-shrink-0 ritmo-icon-tile-question"
+                                          th:text="${status.count}">
+                                        1
+                                    </span>
+
+                                    <h3 class="h6 fw-bold mb-0">
+                                        Pergunta
+                                        <span th:text="${status.count}">1</span>
+                                    </h3>
+                                </div>
+
+                                <div class="dropdown">
+                                    <button class="btn ritmo-card-menu-toggle"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            th:aria-label="|Mais opções para a pergunta ${status.count}|">
+                                        <i class="bi bi-three-dots-vertical" aria-hidden="true"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item"
+                                               th:href="@{/disciplinas/{disciplinaId}/topicos/{topicoId}/perguntas/{perguntaId}/editar(
+                                                    disciplinaId=${disciplina.id},
+                                                    topicoId=${topico.id},
+                                                    perguntaId=${pergunta.id})}">
+                                                <i class="bi bi-pencil me-2" aria-hidden="true"></i>
+                                                Editar
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <form th:action="@{/disciplinas/{disciplinaId}/topicos/{topicoId}/perguntas/{perguntaId}(
+                                                    disciplinaId=${disciplina.id},
+                                                    topicoId=${topico.id},
+                                                    perguntaId=${pergunta.id})}"
+                                                  method="post"
+                                                  data-confirmacao="Excluir esta pergunta?">
+                                                <input type="hidden" name="_method" value="delete">
+                                                <button class="dropdown-item ritmo-dropdown-delete" type="submit">
+                                                    <i class="bi bi-trash me-2" aria-hidden="true"></i>
+                                                    Excluir
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <p class="mb-0 text-break texto-preservado"
+                                   th:text="${pergunta.enunciado}">
+                                    Enunciado
+                                </p>
+                            </div>
+
+                            <details class="border-top pt-3">
+                                <summary class="text-primary fw-semibold">
+                                    Ver gabarito
+                                </summary>
+
+                                <div class="bg-body-tertiary rounded-3 p-3 mt-3">
+                                    <p class="text-secondary mb-0 text-break texto-preservado"
+                                       th:text="${pergunta.gabarito}">
+                                        Gabarito
+                                    </p>
+                                </div>
+                            </details>
+
+                        </article>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+    </div>
+</section>
+</html>

@@ -105,6 +105,7 @@ public class TopicoService {
         Topico topico = buscarTopicoDoUsuario(disciplinaId, topicoId, usuario.getId());
         String nomeDisciplina = topico.getDisciplina().getNome();
 
+        perguntaRepository.deleteByTopico_Id(topicoId);
         topicoRepository.delete(topico);
 
         auditoriaService.registrar(usuario.getEmail(), AcaoAuditoria.EXCLUIR_TOPICO, "Excluiu um tópico da disciplina: " + nomeDisciplina);

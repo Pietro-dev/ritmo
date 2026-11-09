@@ -2,6 +2,7 @@ package app.ritmo.aplicacaoritmo.services;
 
 import app.ritmo.aplicacaoritmo.domain.AcaoAuditoria;
 import app.ritmo.aplicacaoritmo.domain.Disciplina;
+import app.ritmo.aplicacaoritmo.domain.Topico;
 import app.ritmo.aplicacaoritmo.domain.Usuario;
 import app.ritmo.aplicacaoritmo.dto.DisciplinaInputDTO;
 import app.ritmo.aplicacaoritmo.dto.DisciplinaOutputDTO;
@@ -9,6 +10,8 @@ import app.ritmo.aplicacaoritmo.exceptions.EntidadeDuplicadaException;
 import app.ritmo.aplicacaoritmo.exceptions.RecursoNaoEncontrado;
 import app.ritmo.aplicacaoritmo.infra.security.SecurityUtils;
 import app.ritmo.aplicacaoritmo.repositories.DisciplinaRepository;
+import app.ritmo.aplicacaoritmo.repositories.PerguntaRepository;
+import app.ritmo.aplicacaoritmo.repositories.TopicoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,8 @@ public class DisciplinaService {
     private final DisciplinaRepository repository;
     private final SecurityUtils securityUtils;
     private final AuditoriaService auditoriaService;
+    private final TopicoRepository topicoRepository;
+    private final PerguntaRepository perguntaRepository;
 
     @Transactional
     public void cadastrar(DisciplinaInputDTO dto) {
@@ -87,8 +92,15 @@ public class DisciplinaService {
         Usuario usuario = usuarioLogado();
         Disciplina disciplina = buscarEntidadeDoUsuario(id, usuario.getId());
 
-        repository.delete(disciplina);
+        List<Topico> topicos = topicoRepository.findByDisciplina_IdAndDisciplina_Usuario_IdOrderByNomeAsc(disciplina.getId(), usuario.getId());
 
+        for (Topico topico : topicos) {
+            perguntaRepository.deleteByTopico_Id(topico.getId());
+        }
+
+        topicoRepository.deleteAll(topicos);
+        repository.delete(disciplina);
+        
         auditoriaService.registrar(usuario.getEmail(),AcaoAuditoria.EXCLUIR_DISCIPLINA,"Excluiu a disciplina: " + disciplina.getNome()
         );
     }

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR"
       xmlns:th="http://www.thymeleaf.org"
@@ -6,307 +5,106 @@
       layout:decorate="~{layouts/main}">
 
 <section layout:fragment="content">
+    <header class="mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <span class="ritmo-icon-tile bg-primary text-white rounded-4 shadow-sm">
+                <i class="bi bi-journal-bookmark fs-3" aria-hidden="true"></i>
+            </span>
+            <div>
+                <h1 class="fw-bold mb-1">Minhas disciplinas</h1>
+                <p class="text-secondary mb-0">Cadastre e organize as matérias que deseja estudar.</p>
+            </div>
+        </div>
+    </header>
 
-    <div class="py-2">
+    <div class="row g-4">
+        <div class="col-12 col-lg-4">
+            <section class="card border-0 shadow-sm rounded-4" aria-labelledby="tituloCadastro">
+                <div class="card-body p-4">
+                    <h2 class="h5 fw-bold mb-1" id="tituloCadastro">Nova disciplina</h2>
+                    <p class="text-secondary small mb-4">Adicione uma matéria à sua rotina de estudos.</p>
 
-        <!-- Cabeçalho -->
-        <header class="mb-4">
-            <div class="d-flex align-items-center gap-3 mb-2">
-                <span class="d-inline-flex align-items-center justify-content-center
-                             bg-primary bg-opacity-10 text-primary rounded-4 p-3">
-                    <i class="bi bi-journal-bookmark fs-3"
-                       aria-hidden="true"></i>
-                </span>
-
-                <div>
-                    <h1 class="fw-bold mb-1">Minhas disciplinas</h1>
-                    <p class="text-secondary mb-0">
-                        Organize seus estudos e avance no seu ritmo.
-                    </p>
+                    <form th:action="@{/disciplinas}" th:object="${disciplinaInput}" method="post">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label fw-semibold">Nome da disciplina</label>
+                            <input type="text"
+                                   id="nome"
+                                   th:field="*{nome}"
+                                   class="form-control rounded-3"
+                                   placeholder="Ex.: Matemática"
+                                   maxlength="50"
+                                   autocomplete="off"
+                                   required
+                                   aria-describedby="ajudaNome erroNome">
+                            <div id="ajudaNome" class="form-text">
+                                O nome pode ter até 50 caracteres.
+                            </div>
+                            <div id="erroNome" class="text-danger small mt-2"
+                                 th:if="${#fields.hasErrors('nome')}"
+                                 th:errors="*{nome}">Erro de validação</div>
+                        </div>
+                        <button type="submit" class="btn btn-ritmo-primary rounded-pill w-100 py-2 fw-semibold">
+                            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+                            Adicionar disciplina
+                        </button>
+                    </form>
                 </div>
-            </div>
-        </header>
-
-        <!-- Resumo -->
-        <div class="row g-3 mb-4">
-            <div class="col-12 col-md-5 col-xl-4">
-                <section class="card border-0 shadow-sm rounded-4 h-100"
-                         aria-labelledby="tituloResumo">
-
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3">
-
-                            <span class="d-inline-flex align-items-center
-                                         justify-content-center bg-primary
-                                         bg-opacity-10 text-primary rounded-3 p-3">
-                                <i class="bi bi-book fs-3"
-                                   aria-hidden="true"></i>
-                            </span>
-
-                            <div>
-                                <p class="text-secondary small mb-1"
-                                   id="tituloResumo">
-                                    Total de disciplinas
-                                </p>
-
-                                <h2 class="fw-bold mb-0"
-                                    th:text="${#lists.size(disciplinas)}">
-                                    0
-                                </h2>
-                            </div>
-
-                        </div>
-                    </div>
-                </section>
-            </div>
+            </section>
         </div>
 
-        <!-- Conteúdo principal -->
-        <div class="row g-4">
-
-            <!-- Formulário de cadastro -->
-            <div class="col-12 col-lg-4">
-
-                <section class="card border-0 shadow-sm rounded-4 h-100"
-                         aria-labelledby="tituloCadastro">
-
-                    <div class="card-body p-4 p-lg-4">
-
-                        <div class="d-flex align-items-center gap-2 mb-4">
-                            <span class="text-primary">
-                                <i class="bi bi-plus-circle fs-4"
-                                   aria-hidden="true"></i>
-                            </span>
-
-                            <div>
-                                <h2 class="h5 fw-bold mb-1"
-                                    id="tituloCadastro">
-                                    Nova disciplina
-                                </h2>
-
-                                <p class="text-secondary small mb-0">
-                                    Adicione uma matéria à sua rotina.
-                                </p>
-                            </div>
+        <div class="col-12 col-lg-8">
+            <section class="card border-0 shadow-sm rounded-4" aria-labelledby="tituloLista">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                        <div>
+                            <h2 class="h5 fw-bold mb-1" id="tituloLista">Suas disciplinas</h2>
+                            <p class="text-secondary small mb-0">Acesse uma matéria para gerenciar tópicos e perguntas.</p>
                         </div>
-
-                        <form th:action="@{/disciplinas}"
-                              th:object="${disciplinaInput}"
-                              method="post">
-
-                            <div class="mb-4">
-
-                                <label for="nome"
-                                       class="form-label fw-semibold">
-                                    Nome da disciplina
-                                </label>
-
-                                <input type="text"
-                                       id="nome"
-                                       th:field="*{nome}"
-                                       class="form-control rounded-3 py-2"
-                                       placeholder="Ex.: Matemática"
-                                       autocomplete="off"
-                                       required
-                                       aria-describedby="ajudaNome">
-
-                                <div id="ajudaNome"
-                                     class="form-text">
-                                    Informe o nome da matéria que deseja estudar.
-                                </div>
-
-                                <div class="text-danger small mt-2"
-                                     th:if="${#fields.hasErrors('nome')}"
-                                     th:errors="*{nome}">
-                                    Erro de validação
-                                </div>
-
-                            </div>
-
-                            <button type="submit"
-                                    class="btn btn-primary rounded-pill w-100 py-2 fw-semibold">
-
-                                <i class="bi bi-plus-lg me-1"
-                                   aria-hidden="true"></i>
-
-                                Adicionar disciplina
-                            </button>
-
-                        </form>
-
+                        <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-3 py-2"
+                              th:text="|${#lists.size(disciplinas)} cadastrada(s)|">0 cadastrada(s)</span>
                     </div>
-                </section>
 
-            </div>
-
-            <!-- Lista de disciplinas -->
-            <div class="col-12 col-lg-8">
-
-                <section class="card border-0 shadow-sm rounded-4 overflow-hidden"
-                         aria-labelledby="tituloLista">
-
-                    <div class="card-body p-4">
-
-                        <div class="d-flex justify-content-between
-                                    align-items-center flex-wrap gap-2 mb-4">
-
-                            <div>
-                                <h2 class="h5 fw-bold mb-1"
-                                    id="tituloLista">
-                                    Suas disciplinas
-                                </h2>
-
-                                <p class="text-secondary small mb-0">
-                                    Todas as matérias cadastradas por você.
-                                </p>
-                            </div>
-
-                            <span class="badge rounded-pill bg-primary bg-opacity-10
-                                         text-primary px-3 py-2"
-                                  th:text="${#lists.size(disciplinas)} + ' cadastrada(s)'">
-                                0 cadastrada(s)
-                            </span>
-
-                        </div>
-
-                        <!-- Estado vazio -->
-                        <div th:if="${#lists.isEmpty(disciplinas)}"
-                             class="text-center py-5">
-
-                            <span class="d-inline-flex align-items-center
-                                         justify-content-center rounded-circle
-                                         bg-primary bg-opacity-10 text-primary p-4 mb-3">
-
-                                <i class="bi bi-journal-plus fs-1"
-                                   aria-hidden="true"></i>
-
-                            </span>
-
-                            <h3 class="h5 fw-bold mb-2">
-                                Sua jornada começa aqui
-                            </h3>
-
-                            <p class="text-secondary mb-0">
-                                Você ainda não cadastrou nenhuma disciplina.
-                            </p>
-
-                            <p class="text-secondary small mb-0 mt-1">
-                                Use o formulário ao lado para adicionar sua primeira matéria.
-                            </p>
-
-                        </div>
-
-                        <!-- Tabela -->
-                        <div th:unless="${#lists.isEmpty(disciplinas)}"
-                             class="table-responsive">
-
-                            <table class="table align-middle mb-0">
-
-                                <thead>
-                                <tr class="border-bottom">
-                                    <th scope="col"
-                                        class="text-secondary small fw-semibold py-3">
-                                        Disciplina
-                                    </th>
-
-                                    <th scope="col"
-                                        class="text-secondary small fw-semibold text-end py-3"
-                                        style="width: 120px;">
-                                        Ações
-                                    </th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-
-                                <tr th:each="disciplina : ${disciplinas}">
-
-                                    <td class="py-3">
-
-                                        <div class="d-flex align-items-center gap-3">
-
-                                                <span class="d-inline-flex align-items-center
-                                                             justify-content-center bg-primary
-                                                             bg-opacity-10 text-primary rounded-3 p-3">
-
-                                                    <i class="bi bi-book"
-                                                       aria-hidden="true"></i>
-
-                                                </span>
-
-                                            <div>
-                                                <div class="fw-semibold"
-                                                     th:text="${disciplina.nome}">
-                                                    Matemática
-                                                </div>
-
-                                                <small class="text-secondary">
-                                                    Disciplina de estudo
-                                                </small>
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-                                    <td class="text-end py-3">
-
-                                        <div class="d-inline-flex align-items-center gap-2">
-
-                                            <!-- Editar -->
-                                            <a th:href="@{/disciplinas/{id}/editar(id=${disciplina.id})}"
-                                               class="btn btn-sm btn-outline-secondary rounded-pill"
-                                               title="Editar disciplina"
-                                               aria-label="Editar disciplina">
-
-                                                <i class="bi bi-pencil"
-                                                   aria-hidden="true"></i>
-
-                                            </a>
-
-                                            <!-- Excluir -->
-                                            <form th:action="@{/disciplinas/{id}(id=${disciplina.id})}"
-                                                  method="post"
-                                                  class="d-inline"
-                                                  onsubmit="return confirm('Tem certeza que deseja excluir esta disciplina?');">
-
-                                                <input type="hidden"
-                                                       name="_method"
-                                                       value="delete">
-
-                                                <button type="submit"
-                                                        class="btn btn-sm btn-outline-danger rounded-pill"
-                                                        title="Excluir disciplina"
-                                                        aria-label="Excluir disciplina">
-
-                                                    <i class="bi bi-trash"
-                                                       aria-hidden="true"></i>
-
-                                                </button>
-
-                                            </form>
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
+                    <div th:if="${#lists.isEmpty(disciplinas)}" class="text-center py-5">
+                        <i class="bi bi-journal-plus fs-1 text-primary" aria-hidden="true"></i>
+                        <h3 class="h5 fw-bold mt-3 mb-2">Sua jornada começa aqui</h3>
+                        <p class="text-secondary mb-0">Cadastre sua primeira disciplina pelo formulário ao lado.</p>
                     </div>
-                </section>
 
-            </div>
-
+                    <div th:unless="${#lists.isEmpty(disciplinas)}" class="list-group list-group-flush">
+                        <article th:each="disciplina : ${disciplinas}"
+                                 class="list-group-item px-0 py-3 d-flex align-items-center justify-content-between gap-3">
+                            <a class="d-flex align-items-center gap-3 text-decoration-none text-body flex-grow-1"
+                               th:href="@{/disciplinas/{id}/topicos(id=${disciplina.id})}">
+                                <span class="ritmo-icon-tile ritmo-icon-tile-sm bg-primary bg-opacity-10 text-primary rounded-3">
+                                    <i class="bi bi-book" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                    <span class="d-block fw-semibold" th:text="${disciplina.nome}">Matemática</span>
+                                    <small class="text-secondary">Ver tópicos e perguntas</small>
+                                </span>
+                            </a>
+                            <div class="d-flex align-items-center gap-2">
+                                <a th:href="@{/disciplinas/{id}/editar(id=${disciplina.id})}"
+                                   class="btn btn-sm ritmo-dashboard-link rounded-pill"
+                                   title="Editar disciplina" aria-label="Editar disciplina">
+                                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                                </a>
+                                <form th:action="@{/disciplinas/{id}(id=${disciplina.id})}"
+                                      method="post"
+                                      onsubmit="return confirm('Tem certeza que deseja excluir esta disciplina?');">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger rounded-pill"
+                                            title="Excluir disciplina" aria-label="Excluir disciplina">
+                                        <i class="bi bi-trash" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
         </div>
-
     </div>
-
 </section>
-
 </html>

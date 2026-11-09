@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section layout:fragment="content">
+
+    <!-- Cabeçalho -->
+    <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <span class="d-inline-flex align-items-center justify-content-center
+                         rounded-4 bg-primary bg-opacity-10 text-primary flex-shrink-0 ritmo-icon-tile-lg">
+                <i class="bi bi-journal-text fs-2" aria-hidden="true"></i>
+            </span>
+
+            <div>
+                <h1 class="h2 fw-bold mb-1">Tópicos</h1>
+                <p class="text-secondary mb-0">
+                    Disciplina:
+                    <span class="fw-semibold text-body"
+                          th:text="${disciplina.nome}">Disciplina</span>
+                </p>
+            </div>
+        </div>
+
+        <a class="text-decoration-none text-primary fw-semibold"
+           th:href="@{/disciplinas}">
+            <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
+            Voltar às disciplinas
+        </a>
+    </header>
+
+    <div class="row g-4">
+
+        <!-- Cadastro de tópico -->
+        <div class="col-12 col-lg-4">
+            <section class="card border-0 shadow-sm rounded-4 h-100"
+                     aria-labelledby="tituloNovoTopico">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <span class="d-inline-flex align-items-center justify-content-center
+                                     rounded-3 bg-primary bg-opacity-10 text-primary flex-shrink-0 ritmo-icon-tile">
+                            <i class="bi bi-plus-circle fs-4" aria-hidden="true"></i>
+                        </span>
+
+                        <div>
+                            <h2 id="tituloNovoTopico" class="h5 fw-bold mb-1">
+                                Novo tópico
+                            </h2>
+                            <p class="small text-secondary mb-0">
+                                Organize o conteúdo da disciplina.
+                            </p>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/disciplinas/{disciplinaId}/topicos(disciplinaId=${disciplina.id})}"
+                          th:object="${topicoInput}"
+                          method="post">
+
+                        <div class="mb-4">
+                            <label for="nome" class="form-label fw-semibold">
+                                Nome do tópico
+                            </label>
+
+                            <input id="nome"
+                                   type="text"
+                                   th:field="*{nome}"
+                                   th:errorclass="is-invalid"
+                                   class="form-control rounded-3 py-2"
+                                   maxlength="50"
+                                   placeholder="Ex.: Equações de primeiro grau"
+                                   autocomplete="off"
+                                   required>
+
+                            <div class="invalid-feedback" th:errors="*{nome}">
+                                Erro de validação
+                            </div>
+
+                            <div class="form-text">
+                                Use um nome curto e fácil de identificar.
+                            </div>
+                        </div>
+
+                        <button class="btn btn-ritmo-primary rounded-pill w-100 py-2 fw-semibold"
+                                type="submit">
+                            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+                            Adicionar tópico
+                        </button>
+                    </form>
+
+                </div>
+            </section>
+        </div>
+
+        <!-- Lista de tópicos -->
+        <div class="col-12 col-lg-8">
+            <section class="card border-0 shadow-sm rounded-4 overflow-hidden"
+                     aria-labelledby="tituloListaTopicos">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center
+                                flex-wrap gap-2 mb-4">
+
+                        <div>
+                            <h2 id="tituloListaTopicos" class="h5 fw-bold mb-1">
+                                Tópicos cadastrados
+                            </h2>
+                            <p class="small text-secondary mb-0">
+                                Gerencie os conteúdos e suas perguntas.
+                            </p>
+                        </div>
+
+                        <span class="badge rounded-pill bg-primary bg-opacity-10
+                                     text-primary px-3 py-2"
+                              th:text="${#lists.size(topicos)} + ' tópico(s)'">
+                            0 tópico(s)
+                        </span>
+                    </div>
+
+                    <!-- Estado vazio -->
+                    <div th:if="${#lists.isEmpty(topicos)}"
+                         class="text-center py-5">
+
+                        <span class="d-inline-flex align-items-center justify-content-center
+                                     rounded-circle bg-primary bg-opacity-10 text-primary mb-3 ritmo-icon-tile-lg">
+                            <i class="bi bi-journal-plus fs-1" aria-hidden="true"></i>
+                        </span>
+
+                        <h3 class="h5 fw-bold mb-2">
+                            Nenhum tópico por aqui
+                        </h3>
+
+                        <p class="text-secondary mb-1">
+                            Esta disciplina ainda não possui tópicos.
+                        </p>
+
+                        <p class="text-secondary small mb-0">
+                            Use o formulário para cadastrar o primeiro.
+                        </p>
+                    </div>
+
+                    <!-- Tópicos cadastrados -->
+                    <div th:unless="${#lists.isEmpty(topicos)}"
+                         class="row row-cols-1 row-cols-md-2 g-3">
+
+                        <div class="col"
+                             th:each="topico, iter : ${topicos}"
+                             th:with="idx=${iter.index % 4},
+                             cor=${idx == 0} ? 'roxo' : (${idx == 1} ? 'lima' : (${idx == 2} ? 'laranja' : 'carvao'))">
+
+                            <article class="card border-0 shadow-sm rounded-4 h-100 ritmo-color-card"
+                                     th:classappend="' ritmo-card-' + ${cor}">
+                                <div class="card-body p-4 d-flex flex-column">
+
+                                    <div class="d-flex align-items-start justify-content-between mb-3">
+                                        <span class="icon-tile rounded-3 ritmo-card-icon">
+                                            <i class="bi bi-journal-text fs-4" aria-hidden="true"></i>
+                                        </span>
+                                        <div class="dropdown">
+                                            <button class="btn ritmo-card-menu-toggle"
+                                                    type="button"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false"
+                                                    th:aria-label="|Mais opções para ${topico.nome}|">
+                                                <i class="bi bi-three-dots-vertical" aria-hidden="true"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       th:href="@{/disciplinas/{disciplinaId}/topicos/{topicoId}/editar(
+                                                            disciplinaId=${disciplina.id},
+                                                            topicoId=${topico.id})}">
+                                                        <i class="bi bi-pencil me-2" aria-hidden="true"></i>
+                                                        Editar
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <form th:action="@{/disciplinas/{disciplinaId}/topicos/{topicoId}(
+                                                            disciplinaId=${disciplina.id},
+                                                            topicoId=${topico.id})}"
+                                                          method="post"
+                                                          data-confirmacao="Excluir este tópico e todas as suas perguntas?">
+                                                        <input type="hidden" name="_method" value="delete">
+                                                        <button class="dropdown-item ritmo-dropdown-delete" type="submit">
+                                                            <i class="bi bi-trash me-2" aria-hidden="true"></i>
+                                                            Excluir
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="h5 fw-bold mb-1" th:text="${topico.nome}">
+                                        Tópico
+                                    </h3>
+                                    <p class="small mb-4 flex-grow-1">
+                                        Conteúdo organizado para esta disciplina.
+                                    </p>
+
+                                    <div class="mt-auto d-flex align-items-center justify-content-between gap-2">
+                                        <a class="btn btn-sm rounded-pill ritmo-card-action"
+                                           th:href="@{/disciplinas/{disciplinaId}/topicos/{topicoId}/perguntas(
+                                            disciplinaId=${disciplina.id},
+                                            topicoId=${topico.id})}">
+                                            <i class="bi bi-card-text me-1"
+                                               aria-hidden="true"></i>
+                                            Perguntas
+                                        </a>
+                                        <span class="badge rounded-pill ritmo-card-count"
+                                              th:text="${topico.quantidadePerguntas} + ' pergunta(s)'">
+                                            0 pergunta(s)
+                                        </span>
+                                    </div>
+                                </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+    </div>
+</section>
+</html>

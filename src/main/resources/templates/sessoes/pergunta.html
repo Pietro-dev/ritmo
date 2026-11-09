@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section class="tela-sessao-pergunta" layout:fragment="content">
+    <div class="py-2">
+        <header class="mb-4 p-4 p-lg-5 rounded-4 bg-primary bg-opacity-10 border border-primary border-opacity-10 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4">
+            <div>
+                <h1 class="fw-bold text-dark mb-1">Sessão de estudos</h1>
+                <p class="text-secondary mb-0">Responda antes de consultar o gabarito e faça sua autoavaliação.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <span class="badge text-bg-dark rounded-pill px-3 py-2">
+                    Pergunta <span th:text="${pergunta.posicaoAtual}">1</span> de
+                    <span th:text="${pergunta.totalPerguntas}">5</span>
+                </span>
+                <span class="badge text-bg-light border rounded-pill px-3 py-2"
+                      th:if="${pergunta.segundosRestantes > 0}"
+                      data-contagem-regressiva
+                      th:attr="data-segundos=${pergunta.segundosRestantes}">
+                    <i class="bi bi-clock me-1" aria-hidden="true"></i>
+                    <span data-tempo>00:00</span>
+                </span>
+            </div>
+        </header>
+
+        <div class="alert alert-warning" th:if="${erroSessao}" th:text="${erroSessao}"></div>
+        <div class="alert alert-info" th:if="${pergunta.segundosRestantes == 0}">
+            O tempo deste bloco terminou. A sessão foi pausada e você poderá reiniciá-la.
+        </div>
+
+        <section class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4 p-lg-5 border-start border-5 border-primary rounded-4 bg-white">
+                <h2 class="h6 fw-bold mb-4 text-uppercase text-secondary">Enunciado da questão</h2>
+                <p class="mb-0 fs-5 lh-base text-dark text-break texto-preservado fw-medium"
+                   th:text="${pergunta.enunciado}">Enunciado</p>
+            </div>
+        </section>
+
+        <section class="card border-0 shadow-sm rounded-4 mb-4" th:if="${!pergunta.respostaEnviada()}">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold">Sua resposta</h2>
+                <form th:action="@{/sessoes/{id}/resposta(id=${pergunta.sessaoId})}"
+                      th:object="${respostaForm}" method="post">
+                    <label class="form-label" for="resposta">Escreva sua resposta antes de consultar o gabarito.</label>
+                    <textarea class="form-control mb-3" id="resposta" th:field="*{resposta}"
+                              rows="5" maxlength="20000" required></textarea>
+                    <button class="btn btn-ritmo-primary rounded-pill px-4" type="submit">
+                        Registrar resposta
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section th:if="${pergunta.respostaEnviada()}" class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold">Sua resposta</h2>
+                <p class="texto-preservado text-break" th:text="${pergunta.respostaEstudante}"></p>
+                <hr>
+                <h2 class="h5 fw-bold">Gabarito</h2>
+                <p class="texto-preservado text-break mb-0" th:text="${pergunta.gabarito}"></p>
+            </div>
+        </section>
+
+        <section th:if="${pergunta.respostaEnviada()}" class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold">Como foi sua resposta?</h2>
+                <p class="text-secondary">Compare sua resposta com o gabarito e escolha uma opção.</p>
+                <form th:action="@{/sessoes/{id}/autoavaliacao(id=${pergunta.sessaoId})}"
+                      th:object="${avaliacaoForm}" method="post"
+                      class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-primary rounded-pill px-4" type="submit"
+                            name="autoavaliacao" value="FACIL">Foi fácil</button>
+                    <button class="btn btn-outline-primary rounded-pill px-4" type="submit"
+                            name="autoavaliacao" value="DIFICIL">Foi difícil</button>
+                    <button class="btn btn-outline-primary rounded-pill px-4" type="submit"
+                            name="autoavaliacao" value="NAO_LEMBRO">Não me lembrava</button>
+                </form>
+            </div>
+        </section>
+
+        <form th:action="@{/sessoes/{id}/interromper(id=${pergunta.sessaoId})}"
+              method="post" id="formInterromper">
+            <button type="submit" class="btn btn-outline-secondary rounded-pill"
+                    th:if="${pergunta.segundosRestantes > 0}">
+                Interromper e recomeçar depois
+            </button>
+        </form>
+    </div>
+
+    <script>
+        (() => {
+            const timer = document.querySelector("[data-contagem-regressiva]");
+            if (!timer) return;
+
+            const tempo = timer.querySelector("[data-tempo]");
+            const formInterromper = document.getElementById("formInterromper");
+            let restante = Number(timer.dataset.segundos);
+            const atualizar = () => {
+                const minutos = Math.floor(restante / 60);
+                const segundos = restante % 60;
+                tempo.textContent = `${String(minutos).padStart(2, "0")}:${String(segundos).padStart(2, "0")}`;
+                if (restante <= 0) {
+                    formInterromper.requestSubmit();
+                    return;
+                }
+                restante -= 1;
+                window.setTimeout(atualizar, 1000);
+            };
+            atualizar();
+        })();
+    </script>
+</section>
+</html>

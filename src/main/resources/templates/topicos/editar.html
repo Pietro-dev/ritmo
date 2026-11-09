@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section layout:fragment="content">
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-7">
+
+            <!-- Cabeçalho -->
+            <header class="d-flex align-items-center gap-3 mb-4">
+                <span class="d-inline-flex align-items-center justify-content-center
+                             rounded-4 bg-primary bg-opacity-10 text-primary flex-shrink-0 icone-60">
+                    <i class="bi bi-pencil-square fs-2" aria-hidden="true"></i>
+                </span>
+
+                <div>
+                    <h1 class="h3 fw-bold mb-1">Editar tópico</h1>
+                    <p class="text-secondary mb-0"
+                       th:text="${disciplina.nome}">
+                        Disciplina
+                    </p>
+                </div>
+            </header>
+
+            <!-- Formulário -->
+            <section class="card border-0 shadow-sm rounded-4"
+                     aria-labelledby="tituloFormulario">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <i class="bi bi-journal-text text-primary fs-5"
+                           aria-hidden="true"></i>
+                        <h2 id="tituloFormulario" class="h5 fw-bold mb-0">
+                            Dados do tópico
+                        </h2>
+                    </div>
+
+                    <form th:action="@{/disciplinas/{disciplinaId}/topicos/{topicoId}(
+                                disciplinaId=${disciplina.id},
+                                topicoId=${topicoId})}"
+                          th:object="${topicoInput}"
+                          method="post">
+
+                        <input type="hidden" name="_method" value="put">
+
+                        <div class="mb-4">
+                            <label for="nome" class="form-label fw-semibold">
+                                Nome do tópico
+                            </label>
+
+                            <input id="nome"
+                                   type="text"
+                                   th:field="*{nome}"
+                                   th:errorclass="is-invalid"
+                                   class="form-control rounded-3 py-2"
+                                   maxlength="50"
+                                   autocomplete="off"
+                                   required>
+
+                            <div class="invalid-feedback" th:errors="*{nome}">
+                                Erro de validação
+                            </div>
+
+                            <div class="form-text">
+                                Escolha um nome que identifique claramente o conteúdo.
+                            </div>
+                        </div>
+
+                        <hr class="border-secondary-subtle mb-4">
+
+                        <div class="d-flex flex-wrap justify-content-end gap-2">
+
+                            <a class="btn btn-outline-secondary rounded-pill px-4"
+                               th:href="@{/disciplinas/{disciplinaId}/topicos(disciplinaId=${disciplina.id})}">
+                                <i class="bi bi-x-lg me-1" aria-hidden="true"></i>
+                                Cancelar
+                            </a>
+
+                            <button class="btn btn-primary rounded-pill px-4 fw-semibold"
+                                    type="submit">
+                                <i class="bi bi-check-lg me-1" aria-hidden="true"></i>
+                                Salvar alterações
+                            </button>
+
+                        </div>
+                    </form>
+
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+</section>
+</html>
