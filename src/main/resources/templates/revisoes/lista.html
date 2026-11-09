@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section layout:fragment="content">
+    <header class="mb-4 p-4 p-lg-5 rounded-4 bg-primary bg-opacity-10 border border-primary border-opacity-10">
+        <h1 class="fw-bold text-dark mb-1">Revisões</h1>
+        <p class="text-secondary mb-0">Reforce os tópicos estudados com blocos de revisão e autoavaliação.</p>
+    </header>
+
+    <div class="alert alert-danger" th:if="${erroRevisao}" th:text="${erroRevisao}"></div>
+    <div class="alert alert-info" th:if="${#lists.isEmpty(revisoes)}">
+        Ainda não há revisões agendadas. Depois de concluir um bloco de estudos, sua primeira revisão será programada para o dia seguinte.
+    </div>
+
+    <section class="card border-0 shadow-sm rounded-4" th:unless="${#lists.isEmpty(revisoes)}">
+        <div class="card-body p-4">
+            <h2 class="h5 fw-bold mb-3">Revisões agendadas</h2>
+            <form th:action="@{/revisoes/blocos}" th:object="${blocoRevisao}" method="post">
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-md-4" th:each="revisao : ${revisoes}">
+                        <label class="card h-100 rounded-4"
+                               th:classappend="${revisao.atrasada} ? ' border-primary' : ' border-secondary-subtle'">
+                            <span class="card-body">
+                                <span class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                           th:field="*{revisaoIds}" th:value="${revisao.id}"
+                                           th:disabled="${!revisao.atrasada or revisao.sessaoRevisaoId != null}">
+                                    <span class="form-check-label fw-bold"
+                                          th:text="${revisao.topicoNome}">Tópico</span>
+                                </span>
+                                <span class="d-block text-secondary small mt-2"
+                                      th:text="${revisao.disciplinaNome}">Disciplina</span>
+                                <span class="d-block small mt-2">
+                                          Etapa: <span th:text="${revisao.etapa.descricao}">1 dia</span>
+                                </span>
+                                <span class="d-block small"
+                                      th:text="${revisao.perguntasDisponiveis + ' perguntas disponíveis'}"></span>
+                                <span class="badge rounded-pill mt-2"
+                                      th:classappend="${revisao.atrasada} ? ' text-bg-primary' : ' text-bg-secondary'"
+                                      th:text="${revisao.atrasada} ? 'Disponível' : 'Agendada'">Agendada</span>
+                                <span class="d-block small text-secondary mt-2"
+                                      th:text="${#temporals.format(revisao.agendadaPara, 'dd/MM/yyyy')}"></span>
+                                <a class="btn btn-sm btn-outline-primary rounded-pill mt-3"
+                                   th:if="${revisao.sessaoRevisaoId != null and revisao.statusSessaoRevisao == 'EM_ANDAMENTO'}"
+                                   th:href="@{/sessoes/{id}/pergunta(id=${revisao.sessaoRevisaoId})}">
+                                    Continuar revisão
+                                </a>
+                                <a class="btn btn-sm btn-outline-primary rounded-pill mt-3"
+                                   th:if="${revisao.sessaoRevisaoId != null and revisao.statusSessaoRevisao == 'PENDENTE'}"
+                                   th:href="@{/sessoes/{id}(id=${revisao.sessaoRevisaoId})}">
+                                    Abrir bloco de revisão
+                                </a>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row g-3 align-items-end">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label fw-bold" for="duracaoMinutos">Duração do bloco</label>
+                        <select class="form-select" id="duracaoMinutos" th:field="*{duracaoMinutos}">
+                            <option value="5">5 minutos</option>
+                            <option value="15">15 minutos</option>
+                            <option value="30">30 minutos</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <p class="text-secondary mb-3">Selecione revisões disponíveis. O bloco pode combinar tópicos de disciplinas diferentes.</p>
+                        <button class="btn btn-ritmo-primary rounded-pill px-4" type="submit">
+                            Criar bloco de revisão
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</section>
+</html>

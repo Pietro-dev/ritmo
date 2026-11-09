@@ -32,7 +32,11 @@ public class QuotableClientService {
                     .retrieve()
                     .body(FraseOutputDTO.class);
 
-            if (frase == null || frase.frase() == null || frase.autor().isBlank()) {
+            if (frase == null
+                    || frase.frase() == null
+                    || frase.frase().isBlank()
+                    || frase.autor() == null
+                    || frase.autor().isBlank()) {
                 log.warn("A Quotable não retornou conteúdo para a frase.");
                 return Optional.empty();
             }
