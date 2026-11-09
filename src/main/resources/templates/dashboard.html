@@ -1,146 +1,415 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard | Ritmo</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-</head>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
 
-<body class="bg-body-tertiary">
-
-<nav class="navbar navbar-expand-md bg-dark" data-bs-theme="dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold fs-3" th:href="@{/dashboard}">ritmo</a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
-                aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="menuPrincipal">
-            <ul class="nav nav-pills me-auto gap-1 mt-2 mt-md-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/dashboard}">Início</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{/disciplinas}">Disciplinas</a>
-                </li>
-            </ul>
-
-            <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-                <a th:if="${ehAdmin}" th:href="@{/admin/auditorias}"
-                   class="btn btn-outline-warning rounded-pill">
-                    Auditorias
-                </a>
-
-                <div class="dropdown">
-                    <button class="btn btn-outline-light rounded-pill dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false" th:text="${usuario.nome}">
-                        Usuário
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <form th:action="@{/logout}" method="post">
-                                <button type="submit" class="dropdown-item">Sair</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<main class="container py-5">
-    <header class="mb-4">
+<section layout:fragment="content">
+    <header class="mb-3">
         <h1 class="fw-bold mb-1">
             Olá, <span th:text="${usuario.nome}">usuário</span>
         </h1>
-        <p class="text-secondary mb-0" th:if="${ehAdmin}">
-            Acompanhe as atividades administrativas do Ritmo.
-        </p>
-        <p class="text-secondary mb-0" th:unless="${ehAdmin}">
-            Organize seus estudos e avance no seu ritmo.
+        <p class="text-secondary mb-0">
+            Organize seus estudos, acompanhe seu progresso e acesse as ferramentas disponíveis para sua conta.
         </p>
     </header>
 
     <div class="row g-4">
         <div class="col-12 col-lg-8">
-
-            <!-- Conteúdo exclusivo do administrador -->
-            <section th:if="${ehAdmin}" class="card border-0 shadow-sm rounded-4"
-                     aria-labelledby="tituloAdmin">
-                <div class="card-body p-4 p-lg-5">
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle
-                                     bg-warning bg-opacity-25 text-warning fs-3 p-3">
-                            <i class="bi bi-shield-lock" aria-hidden="true"></i>
-                        </span>
-                        <div>
-                            <h2 class="h3 fw-bold mb-1" id="tituloAdmin">Painel administrativo</h2>
-                            <p class="text-secondary mb-0">
-                                Consulte os registros de auditoria das operações realizadas no sistema.
-                            </p>
-                        </div>
-                    </div>
-
-                    <a class="btn btn-warning rounded-pill" th:href="@{/admin/auditorias}">
-                        <i class="bi bi-journal-text me-1" aria-hidden="true"></i>
-                        Consultar auditorias
-                    </a>
-                </div>
-            </section>
-
-            <!-- Conteúdo para estudantes -->
-            <section th:unless="${ehAdmin}" class="card border-0 shadow-sm rounded-4"
+            <section class="card border-0 shadow-sm rounded-4"
                      aria-labelledby="tituloEstudante">
-                <div class="card-body p-4 p-lg-5">
+                <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3 mb-4">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle
-                                     bg-primary bg-opacity-10 text-primary fs-3 p-3">
-                            <i class="bi bi-journal-bookmark" aria-hidden="true"></i>
+                        <span class="ritmo-dashboard-icon d-inline-flex align-items-center justify-content-center rounded-circle
+                                     bg-primary bg-opacity-10 text-primary">
+                            <i class="bi bi-play-circle" aria-hidden="true"></i>
                         </span>
                         <div>
-                            <h2 class="h3 fw-bold mb-1" id="tituloEstudante">Organize seus estudos</h2>
+                            <h2 class="h3 fw-bold mb-1" id="tituloEstudante">Continue seus estudos</h2>
                             <p class="text-secondary mb-0">
-                                Comece cadastrando as disciplinas que deseja estudar.
+                                Monte um bloco de estudo, revise seus tópicos ou organize suas disciplinas.
                             </p>
                         </div>
                     </div>
 
-                    <a class="btn btn-primary rounded-pill" th:href="@{/disciplinas}">
-                        <i class="bi bi-arrow-right me-1" aria-hidden="true"></i>
-                        Ver minhas disciplinas
-                    </a>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="btn btn-ritmo-primary rounded-pill" th:href="@{/blocos/configuracao}">
+                            <i class="bi bi-play-fill me-1" aria-hidden="true"></i>
+                            Iniciar bloco de estudo
+                        </a>
+                        <a class="btn ritmo-dashboard-link rounded-pill" th:href="@{/disciplinas}">
+                            <i class="bi bi-journal-bookmark me-1" aria-hidden="true"></i>
+                            Minhas disciplinas
+                        </a>
+                        <a class="btn ritmo-dashboard-link rounded-pill" th:href="@{/revisoes}">
+                            <i class="bi bi-arrow-repeat me-1" aria-hidden="true"></i>
+                            Revisões
+                        </a>
+                    </div>
                 </div>
             </section>
         </div>
 
-        <!-- A frase só é renderizada para estudantes -->
-        <aside class="col-12 col-lg-4" th:unless="${ehAdmin}">
-            <section th:if="${frase != null}" class="card border-0 shadow-sm rounded-4"
+        <aside class="col-12 col-lg-4">
+            <section th:if="${frase != null}" class="ritmo-quote ritmo-dashboard-quote h-100"
                      aria-labelledby="tituloFrase">
-                <div class="card-body p-4">
-                    <p class="text-uppercase small fw-semibold text-secondary mb-2" id="tituloFrase">
-                        Inspiração para hoje
+                <div class="d-flex flex-column h-100">
+                    <p class="ritmo-quote-label mb-3" id="tituloFrase">
+                        <i class="bi bi-stars me-2" aria-hidden="true"></i>Inspiração para hoje
                     </p>
-
-                    <blockquote class="blockquote border-start border-3 border-warning ps-3 mb-0">
-                        <p class="fst-italic small mb-1" th:text="${frase.frase}">
+                    <blockquote class="mb-4">
+                        <p class="ritmo-quote-text mb-0" th:text="${frase.frase}">
                             Uma frase motivacional aparecerá aqui.
                         </p>
-                        <footer class="blockquote-footer small mb-0">
-                            <span th:text="${frase.autor}">Autor</span>
-                        </footer>
                     </blockquote>
+                    <footer class="ritmo-quote-author mt-auto">
+                        <span th:text="${frase.autor}">Autor</span>
+                    </footer>
                 </div>
             </section>
         </aside>
     </div>
-</main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <section th:if="${ehAdmin}" class="mt-4" aria-labelledby="tituloAdmin">
+        <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-3">
+            <div>
+                <h2 class="h3 fw-bold mb-1" id="tituloAdmin">Painel administrativo</h2>
+                <p class="text-secondary small mb-0">Indicadores agregados da plataforma · <span
+                        th:text="${periodoSelecionado.rotulo}">30 dias</span></p>
+            </div>
+            <form th:action="@{/dashboard}" method="get" class="d-flex align-items-end gap-2">
+                <div>
+                    <label class="form-label small fw-semibold mb-1" for="periodoAdmin">Período dos indicadores</label>
+                    <select class="form-select form-select-sm" id="periodoAdmin" name="periodo">
+                        <option th:each="periodo : ${periodos}"
+                                th:value="${periodo}"
+                                th:text="${periodo.rotulo}"
+                                th:selected="${periodo == periodoSelecionado}">30 dias</option>
+                    </select>
+                </div>
+                <button class="btn btn-ritmo-primary btn-sm rounded-pill px-3" type="submit">Aplicar</button>
+            </form>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body">
+                        <p class="text-secondary mb-1">Usuários ativos</p>
+                        <p class="h3 fw-bold mb-0" th:text="${painelAdmin.usuariosAtivos}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body">
+                        <p class="text-secondary mb-1">Novos usuários no período</p>
+                        <p class="h3 fw-bold mb-0" th:text="${painelAdmin.novosUsuarios}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body">
+                        <p class="text-secondary mb-1">Sessões concluídas</p>
+                        <p class="h3 fw-bold mb-0" th:text="${painelAdmin.sessoesConcluidas}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body">
+                        <p class="text-secondary mb-1">Perguntas respondidas</p>
+                        <p class="h3 fw-bold mb-0" th:text="${painelAdmin.perguntasRespondidas}">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-xl-7">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold mb-3">Atividade da plataforma</h3>
+                        <ul class="list-inline small mb-3" aria-label="Legenda da atividade">
+                            <li class="list-inline-item me-3">
+                                <span class="badge rounded-pill ritmo-legend-easy me-1" aria-hidden="true">&nbsp;</span>
+                                Cadastros
+                            </li>
+                            <li class="list-inline-item">
+                                <span class="badge rounded-pill ritmo-legend-missed me-1" aria-hidden="true">&nbsp;</span>
+                                Sessões
+                            </li>
+                        </ul>
+                        <p class="text-secondary mb-0" th:if="${#lists.isEmpty(painelAdmin.atividade)}">
+                            Ainda não há atividade registrada neste período.
+                        </p>
+                        <div th:each="item : ${painelAdmin.atividade}" class="ritmo-admin-activity mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-semibold" th:text="${item.periodo}">09/11</span>
+                                <small class="text-secondary"
+                                       th:text="|${item.cadastros} cadastros · ${item.sessoes} sessões|">
+                                    0 cadastros · 0 sessões
+                                </small>
+                            </div>
+                            <div class="progress ritmo-admin-activity-bar mb-1" role="img"
+                                 th:aria-label="|${item.periodo}: ${item.cadastros} cadastros|">
+                                <div class="progress-bar ritmo-admin-signups"
+                                     th:style="|width: ${item.percentualCadastros()}%|"
+                                     th:title="|Cadastros: ${item.cadastros}|"></div>
+                            </div>
+                            <div class="progress ritmo-admin-activity-bar" role="img"
+                                 th:aria-label="|${item.periodo}: ${item.sessoes} sessões concluídas|">
+                                <div class="progress-bar ritmo-admin-sessions"
+                                     th:style="|width: ${item.percentualSessoes()}%|"
+                                     th:title="|Sessões concluídas: ${item.sessoes}|"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-xl-5">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold mb-3">Conteúdo cadastrado</h3>
+                        <div class="d-flex justify-content-between py-2 border-bottom">
+                            <span>Disciplinas</span><strong th:text="${painelAdmin.disciplinas}">0</strong>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 border-bottom">
+                            <span>Tópicos</span><strong th:text="${painelAdmin.topicos}">0</strong>
+                        </div>
+                        <div class="d-flex justify-content-between py-2">
+                            <span>Perguntas</span><strong th:text="${painelAdmin.perguntas}">0</strong>
+                        </div>
+                        <div class="alert ritmo-admin-content-alert mb-0 mt-2 py-2">
+                            <strong th:text="${painelAdmin.topicosSemPerguntas}">0</strong>
+                            tópicos sem perguntas
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body">
+                        <h3 class="h6 fw-bold">Revisões pendentes</h3>
+                        <p class="h3 fw-bold mb-0" th:text="${painelAdmin.revisoesPendentes}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-8">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body">
+                        <h3 class="h6 fw-bold">Revisões concluídas no período</h3>
+                        <p class="h3 fw-bold mb-0" th:text="${painelAdmin.revisoesConcluidas}">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <h3 class="h5 fw-bold mb-0">Auditoria recente</h3>
+                    <a class="btn btn-ritmo-primary btn-sm rounded-pill" th:href="@{/admin/auditorias}">
+                        Consultar auditorias
+                    </a>
+                </div>
+                <p class="text-secondary mb-0" th:if="${#lists.isEmpty(painelAdmin.auditoriasRecentes)}">
+                    Nenhuma ação administrativa recente.
+                </p>
+                <div class="table-responsive" th:unless="${#lists.isEmpty(painelAdmin.auditoriasRecentes)}">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead>
+                        <tr><th scope="col">Ação</th><th scope="col">Data e hora</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="auditoria : ${painelAdmin.auditoriasRecentes}">
+                            <td class="text-capitalize" th:text="${auditoria.acao}">criar disciplina</td>
+                            <td th:text="${#temporals.format(auditoria.dataHora, 'dd/MM/yyyy HH:mm')}">09/11/2026 10:00</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-4" aria-labelledby="tituloProgresso">
+        <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-3">
+            <div>
+                <h2 class="h3 fw-bold mb-1" id="tituloProgresso"
+                    th:text="${ehAdmin ? 'Meu progresso pessoal' : 'Seu progresso'}">Seu progresso</h2>
+                <p class="text-secondary small mb-0"
+                   th:text="|Período: ${periodoSelecionado.rotulo}|">Período: 30 dias</p>
+            </div>
+            <form th:if="${!ehAdmin}" th:action="@{/dashboard}" method="get" class="d-flex align-items-end gap-2">
+                <div>
+                    <label class="form-label small fw-semibold mb-1" for="periodo">Exibir progresso</label>
+                    <select class="form-select form-select-sm" id="periodo" name="periodo">
+                        <option th:each="periodo : ${periodos}"
+                                th:value="${periodo}"
+                                th:text="${periodo.rotulo}"
+                                th:selected="${periodo == periodoSelecionado}">30 dias</option>
+                    </select>
+                </div>
+                <button class="btn btn-ritmo-primary btn-sm rounded-pill px-3" type="submit">Aplicar</button>
+            </form>
+        </div>
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body">
+                        <p class="text-secondary mb-1">Sessões concluídas</p>
+                        <p class="h3 fw-bold mb-0" th:text="${resumo.sessoesConcluidas}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body">
+                        <p class="text-secondary mb-1">Minutos estudados</p>
+                        <p class="h3 fw-bold mb-0" th:text="${resumo.minutosEstudados}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body">
+                        <p class="text-secondary mb-1">Perguntas avaliadas</p>
+                        <p class="h3 fw-bold mb-0" th:text="${resumo.perguntasAvaliadas}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a class="card border-0 shadow-sm rounded-4 h-100 text-decoration-none"
+                   th:href="@{/revisoes}">
+                    <div class="card-body">
+                        <p class="text-secondary mb-1">Revisões em aberto</p>
+                        <p class="h3 fw-bold mb-0" th:text="${resumo.revisoesPendentes}">0</p>
+                        <small class="text-primary fw-semibold" th:text="|${resumo.revisoesDisponiveis} disponíveis hoje|">
+                            0 disponíveis hoje
+                        </small>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <h3 class="h5 fw-bold">Autoavaliações</h3>
+                <p class="text-secondary mb-3">
+                    <span th:text="${resumo.faceis}">0</span> fáceis,
+                    <span th:text="${resumo.dificeis}">0</span> difíceis e
+                    <span th:text="${resumo.naoLembrei}">0</span> não lembradas.
+                </p>
+                <ul class="list-inline small mb-3" aria-label="Legenda dos gráficos de autoavaliação">
+                    <li class="list-inline-item me-3">
+                        <span class="badge rounded-pill ritmo-legend-easy me-1" aria-hidden="true">&nbsp;</span>
+                        Fáceis
+                    </li>
+                    <li class="list-inline-item me-3">
+                        <span class="badge rounded-pill ritmo-legend-hard me-1" aria-hidden="true">&nbsp;</span>
+                        Difíceis
+                    </li>
+                    <li class="list-inline-item">
+                        <span class="badge rounded-pill ritmo-legend-missed me-1" aria-hidden="true">&nbsp;</span>
+                        Não lembrei
+                    </li>
+                </ul>
+                <div class="progress ritmo-dashboard-progress" role="img"
+                     th:aria-label="|${resumo.faceis} fáceis, ${resumo.dificeis} difíceis e ${resumo.naoLembrei} não lembradas|">
+                    <div class="progress-bar bg-success ritmo-progress-easy"
+                         th:style="|width: ${resumo.percentualFacil()}%|"
+                         th:title="|Fáceis: ${resumo.faceis} de ${resumo.perguntasAvaliadas} (${resumo.percentualFacil()}%)|">
+                        <span th:if="${resumo.percentualFacil() >= 12}"
+                              th:text="|${resumo.percentualFacil()}%|">0%</span>
+                    </div>
+                    <div class="progress-bar bg-warning ritmo-progress-hard"
+                         th:style="|width: ${resumo.percentualDificil()}%|"
+                         th:title="|Difíceis: ${resumo.dificeis} de ${resumo.perguntasAvaliadas} (${resumo.percentualDificil()}%)|">
+                        <span th:if="${resumo.percentualDificil() >= 12}"
+                              th:text="|${resumo.percentualDificil()}%|">0%</span>
+                    </div>
+                    <div class="progress-bar bg-primary ritmo-progress-missed"
+                         th:style="|width: ${resumo.percentualNaoLembrei()}%|"
+                         th:title="|Não lembrei: ${resumo.naoLembrei} de ${resumo.perguntasAvaliadas} (${resumo.percentualNaoLembrei()}%)|">
+                        <span th:if="${resumo.percentualNaoLembrei() >= 12}"
+                              th:text="|${resumo.percentualNaoLembrei()}%|">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-12 col-xl-6">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold mb-3">Desempenho por disciplina</h3>
+                        <p class="text-secondary" th:if="${#lists.isEmpty(resumo.porDisciplina)}">
+                            Conclua um bloco para ver seu desempenho.
+                        </p>
+                        <div th:each="item : ${resumo.porDisciplina}" class="mb-3">
+                            <div class="d-flex justify-content-between gap-2 mb-1">
+                                <span class="fw-semibold" th:text="${item.categoria}">Disciplina</span>
+                                <small class="text-secondary" th:text="|${item.total} perguntas|">0 perguntas</small>
+                            </div>
+                            <div class="progress ritmo-dashboard-progress" role="img"
+                                 th:aria-label="|${item.categoria}: ${item.faceis} fáceis, ${item.dificeis} difíceis, ${item.naoLembrei} não lembradas|">
+                                <div class="progress-bar bg-success ritmo-progress-easy" th:style="|width: ${item.percentualFacil()}%|"
+                                     th:title="|Fáceis: ${item.faceis} de ${item.total} (${item.percentualFacil()}%)|">
+                                    <span th:if="${item.percentualFacil() >= 12}" th:text="|${item.percentualFacil()}%|">0%</span>
+                                </div>
+                                <div class="progress-bar bg-warning ritmo-progress-hard" th:style="|width: ${item.percentualDificil()}%|"
+                                     th:title="|Difíceis: ${item.dificeis} de ${item.total} (${item.percentualDificil()}%)|">
+                                    <span th:if="${item.percentualDificil() >= 12}" th:text="|${item.percentualDificil()}%|">0%</span>
+                                </div>
+                                <div class="progress-bar bg-primary ritmo-progress-missed" th:style="|width: ${item.percentualNaoLembrei()}%|"
+                                     th:title="|Não lembrei: ${item.naoLembrei} de ${item.total} (${item.percentualNaoLembrei()}%)|">
+                                    <span th:if="${item.percentualNaoLembrei() >= 12}" th:text="|${item.percentualNaoLembrei()}%|">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-xl-6">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold mb-3">Desempenho por tópico</h3>
+                        <p class="text-secondary" th:if="${#lists.isEmpty(resumo.porTopico)}">
+                            As avaliações dos tópicos aparecerão aqui.
+                        </p>
+                        <div th:each="item : ${resumo.porTopico}" class="mb-3">
+                            <div class="d-flex justify-content-between gap-2 mb-1">
+                                <span>
+                                    <span class="fw-semibold" th:text="${item.categoria}">Tópico</span>
+                                    <small class="text-secondary" th:text="| · ${item.disciplina}|"> · Disciplina</small>
+                                </span>
+                                <small class="text-secondary text-nowrap" th:text="|${item.total} perguntas|">0 perguntas</small>
+                            </div>
+                            <div class="progress ritmo-dashboard-progress" role="img"
+                                 th:aria-label="|${item.categoria}: ${item.faceis} fáceis, ${item.dificeis} difíceis, ${item.naoLembrei} não lembradas|">
+                                <div class="progress-bar bg-success ritmo-progress-easy" th:style="|width: ${item.percentualFacil()}%|"
+                                     th:title="|Fáceis: ${item.faceis} de ${item.total} (${item.percentualFacil()}%)|">
+                                    <span th:if="${item.percentualFacil() >= 12}" th:text="|${item.percentualFacil()}%|">0%</span>
+                                </div>
+                                <div class="progress-bar bg-warning ritmo-progress-hard" th:style="|width: ${item.percentualDificil()}%|"
+                                     th:title="|Difíceis: ${item.dificeis} de ${item.total} (${item.percentualDificil()}%)|">
+                                    <span th:if="${item.percentualDificil() >= 12}" th:text="|${item.percentualDificil()}%|">0%</span>
+                                </div>
+                                <div class="progress-bar bg-primary ritmo-progress-missed" th:style="|width: ${item.percentualNaoLembrei()}%|"
+                                     th:title="|Não lembrei: ${item.naoLembrei} de ${item.total} (${item.percentualNaoLembrei()}%)|">
+                                    <span th:if="${item.percentualNaoLembrei() >= 12}" th:text="|${item.percentualNaoLembrei()}%|">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
 </html>
