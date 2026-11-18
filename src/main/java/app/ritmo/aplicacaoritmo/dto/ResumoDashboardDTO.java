@@ -4,7 +4,7 @@ import java.util.List;
 
 public record ResumoDashboardDTO(
         long sessoesConcluidas,
-        long minutosEstudados,
+        long minutosPlanejados,
         long perguntasAvaliadas,
         long faceis,
         long dificeis,

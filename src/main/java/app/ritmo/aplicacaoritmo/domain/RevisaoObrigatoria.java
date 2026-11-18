@@ -73,7 +73,7 @@ public class RevisaoObrigatoria {
     }
 
     public void associarASessao(SessaoEstudo sessaoRevisao) {
-        if (concluidaEm != null || sessaoRevisao != null) {
+        if (concluidaEm != null || this.sessaoRevisao != null) {
             throw new IllegalStateException("Esta revisão já foi associada a uma sessão.");
         }
         this.sessaoRevisao = sessaoRevisao;

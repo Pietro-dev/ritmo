@@ -1,7 +1,9 @@
 package app.ritmo.aplicacaoritmo.repositories;
 
 import app.ritmo.aplicacaoritmo.domain.RevisaoObrigatoria;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -22,6 +24,7 @@ public interface RevisaoObrigatoriaRepository
             Long usuarioId
     );
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<RevisaoObrigatoria> findByIdInAndUsuario_IdAndConcluidaEmIsNullAndSessaoRevisaoIsNull(
             Collection<Long> ids,
             Long usuarioId

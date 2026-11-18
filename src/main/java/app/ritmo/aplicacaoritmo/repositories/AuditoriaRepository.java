@@ -5,6 +5,7 @@ import app.ritmo.aplicacaoritmo.repositories.projections.AuditoriaAdminProjectio
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -13,6 +14,10 @@ import java.util.List;
 
 public interface AuditoriaRepository extends JpaRepository<Auditoria, Long> {
     long deleteByUsuarioEmailIgnoreCase(String usuarioEmail);
+
+    @Modifying
+    @Query(value = "DELETE FROM auditorias WHERE data_hora < :limite", nativeQuery = true)
+    int excluirAnterioresA(@Param("limite") LocalDateTime limite);
 
     @Query(value = """
             SELECT a.data_hora AS "dataHora", a.acao AS "acao"

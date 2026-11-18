@@ -7,9 +7,8 @@ spring:
       filter:
         enabled: true
 
-  # Configuração para ativar o perfil padrão como 'dev'
   profiles:
-    active: dev
+    default: dev
 
   thymeleaf:
     prefix: classpath:/templates/
@@ -25,7 +24,7 @@ integrations:
     base-url: http://api.quotable.io
   deepl:
     base-url: https://api-free.deepl.com
-    auth-key: ${DEEPL_AUTH_KEY}
+    auth-key: ${DEEPL_AUTH_KEY:}
 
 ---
 # PERFIL DE DESENVOLVIMENTO
@@ -41,8 +40,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update # Atualiza as tabelas automaticamente
-    show-sql: true
+      ddl-auto: validate
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -51,7 +50,7 @@ spring:
 
 app:
   admin:
-    senha: ${APP_ADMIN_DEV_SENHA:123456}
+    senha: ${APP_ADMIN_DEV_SENHA}
 ---
 # PERFIL DE PRODUÇÃO
 spring:

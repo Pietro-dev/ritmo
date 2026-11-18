@@ -51,7 +51,7 @@ public class DashboardService {
 
         return new ResumoDashboardDTO(
                 valor(sessoes.getSessoesConcluidas()),
-                valor(sessoes.getMinutosEstudados()),
+                valor(sessoes.getMinutosPlanejados()),
                 faceis + dificeis + naoLembrei,
                 faceis,
                 dificeis,

@@ -1,6 +1,9 @@
 package app.ritmo.aplicacaoritmo.infra.config;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+@Configuration
+@EnableScheduling
 public class SchedulingConfig {
-    // TODO: Habilitar scheduling somente quando necessário
-    // TODO: Definir configuração para ambiente de produção
 }

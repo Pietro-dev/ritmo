@@ -2,6 +2,7 @@ package app.ritmo.aplicacaoritmo.services;
 
 import app.ritmo.aplicacaoritmo.domain.AcaoAuditoria;
 import app.ritmo.aplicacaoritmo.domain.Pergunta;
+import app.ritmo.aplicacaoritmo.domain.StatusSessao;
 import app.ritmo.aplicacaoritmo.domain.Topico;
 import app.ritmo.aplicacaoritmo.domain.Usuario;
 import app.ritmo.aplicacaoritmo.dto.PerguntaInputDTO;
@@ -9,9 +10,11 @@ import app.ritmo.aplicacaoritmo.dto.PerguntaOutputDTO;
 import app.ritmo.aplicacaoritmo.exceptions.RecursoNaoEncontrado;
 import app.ritmo.aplicacaoritmo.infra.security.SecurityUtils;
 import app.ritmo.aplicacaoritmo.repositories.PerguntaRepository;
+import app.ritmo.aplicacaoritmo.repositories.SessaoEstudoRepository;
 import app.ritmo.aplicacaoritmo.repositories.TopicoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +25,7 @@ public class PerguntaService {
 
     private final PerguntaRepository perguntaRepository;
     private final TopicoRepository topicoRepository;
+    private final SessaoEstudoRepository sessaoRepository;
     private final SecurityUtils securityUtils;
     private final AuditoriaService auditoriaService;
 
@@ -35,6 +39,7 @@ public class PerguntaService {
     @Transactional
     public void cadastrar(Long disciplinaId, Long topicoId, PerguntaInputDTO dto) {
         Usuario usuario = usuarioLogado();
+        exigirSessaoSemAtividade(usuario);
         Topico topico = buscarTopicoDoUsuario(disciplinaId, topicoId, usuario.getId());
 
         Pergunta pergunta = new Pergunta(normalizarTexto(dto.enunciado()), normalizarTexto(dto.gabarito()), topico);
@@ -46,6 +51,7 @@ public class PerguntaService {
     @Transactional
     public List<PerguntaOutputDTO> listarPerguntasDoTopico(Long disciplinaId, Long topicoId) {
         Usuario usuario = usuarioLogado();
+        exigirSessaoSemAtividade(usuario);
         buscarTopicoDoUsuario(disciplinaId, topicoId, usuario.getId());
 
         return perguntaRepository.findByTopico_IdAndTopico_Disciplina_IdAndTopico_Disciplina_Usuario_IdOrderByIdAsc(topicoId, disciplinaId,usuario.getId())
@@ -57,6 +63,7 @@ public class PerguntaService {
     @Transactional
     public PerguntaInputDTO buscarParaEdicao(Long disciplinaId, Long topicoId, Long perguntaId) {
         Usuario usuario = usuarioLogado();
+        exigirSessaoSemAtividade(usuario);
         Pergunta pergunta = buscarPerguntaDoUsuario(disciplinaId, topicoId, perguntaId, usuario.getId());
 
         return new PerguntaInputDTO(pergunta.getEnunciado(), pergunta.getGabarito());
@@ -65,6 +72,7 @@ public class PerguntaService {
     @Transactional
     public void atualizar(Long disciplinaId, Long topicoId, Long perguntaId, PerguntaInputDTO dto) {
         Usuario usuario = usuarioLogado();
+        exigirSessaoSemAtividade(usuario);
         Pergunta pergunta = buscarPerguntaDoUsuario(disciplinaId, topicoId, perguntaId, usuario.getId());
 
         pergunta.setEnunciado(normalizarTexto(dto.enunciado()));
@@ -77,6 +85,7 @@ public class PerguntaService {
     @Transactional
     public void excluir(Long disciplinaId, Long topicoId, Long perguntaId) {
         Usuario usuario = usuarioLogado();
+        exigirSessaoSemAtividade(usuario);
         Pergunta pergunta = buscarPerguntaDoUsuario(disciplinaId, topicoId, perguntaId, usuario.getId());
         String nomeTopico = pergunta.getTopico().getNome();
 
@@ -92,6 +101,14 @@ public class PerguntaService {
 
     private Usuario usuarioLogado(){
         return securityUtils.getUsuarioLogado();
+    }
+
+    private void exigirSessaoSemAtividade(Usuario usuario) {
+        if (sessaoRepository.existsByUsuario_IdAndStatus(usuario.getId(), StatusSessao.EM_ANDAMENTO)) {
+            throw new AccessDeniedException(
+                    "O gerenciamento de perguntas está bloqueado durante uma sessão de estudo."
+            );
+        }
     }
 
 

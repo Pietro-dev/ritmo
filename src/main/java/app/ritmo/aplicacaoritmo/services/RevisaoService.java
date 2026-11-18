@@ -159,6 +159,11 @@ public class RevisaoService {
 
         for (int indice = 0; indice < selecionadas.size(); indice++) {
             RevisaoObrigatoria revisao = selecionadas.get(indice);
+            if (revisao.getConcluidaEm() != null || revisao.getSessaoRevisao() != null) {
+                throw new NegocioException(
+                        "Uma das revisões selecionadas não está mais disponível. Atualize a página e tente novamente."
+                );
+            }
             List<ItemSessao> itensOriginais = itensPorTopico.get(indice);
             int quantidadeNoBloco = quantidadeBase + (indice < restante ? 1 : 0);
 

@@ -1,6 +1,8 @@
 package app.ritmo.aplicacaoritmo.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -8,6 +10,16 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ModelAndView handleAccessDeniedException(AccessDeniedException ex) {
+        log.warn("Acesso negado: {}", ex.getMessage());
+
+        ModelAndView mv = new ModelAndView("erro");
+        mv.setStatus(HttpStatus.FORBIDDEN);
+        mv.addObject("message", ex.getMessage());
+        return mv;
+    }
 
     /*
     * Essa classe vigia todos os controllers.

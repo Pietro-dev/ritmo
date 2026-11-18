@@ -1,6 +1,7 @@
 package app.ritmo.aplicacaoritmo.repositories;
 
 import app.ritmo.aplicacaoritmo.domain.SessaoEstudo;
+import app.ritmo.aplicacaoritmo.domain.StatusSessao;
 import app.ritmo.aplicacaoritmo.repositories.projections.DesempenhoProjection;
 import app.ritmo.aplicacaoritmo.repositories.projections.ResumoSessaoProjection;
 import app.ritmo.aplicacaoritmo.repositories.projections.AtividadeAdminProjection;
@@ -15,6 +16,8 @@ import java.time.LocalDateTime;
 public interface SessaoEstudoRepository extends JpaRepository<SessaoEstudo, Long> {
 
     Optional<SessaoEstudo> findByIdAndUsuario_Id(Long sessaoId,  Long usuarioId);
+
+    boolean existsByUsuario_IdAndStatus(Long usuarioId, StatusSessao status);
 
     @Query(value = """
             SELECT COUNT(*)
@@ -82,7 +85,7 @@ public interface SessaoEstudoRepository extends JpaRepository<SessaoEstudo, Long
 
     @Query(value = """
             SELECT COUNT(*) AS "sessoesConcluidas",
-                   COALESCE(SUM(duracao_minutos), 0) AS "minutosEstudados"
+                   COALESCE(SUM(duracao_minutos), 0) AS "minutosPlanejados"
             FROM sessao_estudo
             WHERE usuario_id = :usuarioId
               AND status = 'CONCLUIDA'
