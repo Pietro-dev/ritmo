@@ -42,6 +42,6 @@ public class AuditoriaController {
 
         auditoriaService.registrar(authentication.getName(), AcaoAuditoria.CONSULTAR_AUDITORIAS, "Administrador consultou os registros de auditoria");
 
-        return "/admin/auditorias";
+        return "admin/auditorias";
     }
 }
