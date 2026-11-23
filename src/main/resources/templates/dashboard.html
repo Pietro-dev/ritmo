@@ -5,11 +5,11 @@
       layout:decorate="~{layouts/main}">
 
 <section layout:fragment="content">
-    <header class="mb-3">
+    <header class="mb-4 p-4 p-lg-5 rounded-4 ritmo-card-roxo shadow-sm">
         <h1 class="fw-bold mb-1">
             Olá, <span th:text="${usuario.nome}">usuário</span>
         </h1>
-        <p class="text-secondary mb-0">
+        <p class="mb-0 opacity-75">
             Organize seus estudos, acompanhe seu progresso e acesse as ferramentas disponíveis para sua conta.
         </p>
     </header>
@@ -54,9 +54,7 @@
             <section th:if="${frase != null}" class="ritmo-quote ritmo-dashboard-quote h-100"
                      aria-labelledby="tituloFrase">
                 <div class="d-flex flex-column h-100">
-                    <p class="ritmo-quote-label mb-3" id="tituloFrase">
-                        <i class="bi bi-stars me-2" aria-hidden="true"></i>Inspiração para hoje
-                    </p>
+                    <p class="ritmo-quote-label mb-3" id="tituloFrase">Inspiração para hoje</p>
                     <blockquote class="mb-4">
                         <p class="ritmo-quote-text mb-0" th:text="${frase.frase}">
                             Uma frase motivacional aparecerá aqui.
