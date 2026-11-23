@@ -15,7 +15,13 @@ public class AuditoriaRetentionJob {
 
     @Scheduled(cron = "0 0 3 * * *")
     public void removerAuditoriasExpiradas() {
-        int removidas = auditoriaRetencaoService.excluirRegistrosExpirados();
-        log.info("Rotina de retenção de auditoria concluída: {} registro(s) removido(s)", removidas);
+        log.info("Job de retenção de auditoria iniciado.");
+        try {
+            int removidas = auditoriaRetencaoService.excluirRegistrosExpirados();
+            log.info("Job de retenção de auditoria concluído: {} registro(s) removido(s).", removidas);
+        } catch (Exception ex) {
+            log.error("Job de retenção de auditoria falhou.", ex);
+            throw ex;
+        }
     }
 }
