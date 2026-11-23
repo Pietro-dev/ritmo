@@ -12,7 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByEmailHash(String emailHash);
+
+    default Optional<Usuario> findByEmail(String email) {
+        return findByEmailHash(app.ritmo.aplicacaoritmo.infra.security.EmailHash.of(email));
+    }
+
+    List<Usuario> findAllByOrderByDataCadastroDesc();
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<Usuario> findByRoleAndStatus(Role role, StatusCadastro status);
