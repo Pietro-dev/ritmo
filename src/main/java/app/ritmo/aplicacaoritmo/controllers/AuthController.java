@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
+import jakarta.servlet.http.HttpServletRequest;
+import app.ritmo.aplicacaoritmo.infra.security.EmailHash;
+import app.ritmo.aplicacaoritmo.infra.config.ClockConfig;
+import java.time.ZonedDateTime;
 
 @Controller
 public class AuthController {
@@ -32,8 +36,22 @@ public class AuthController {
     private AuditoriaService auditoriaService;
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login(Model model, HttpServletRequest request) {
         model.addAttribute("frase", fraseMotivacionalService.buscarFraseETraduzir().orElse(null));
+        Object motivo = request.getSession(false) == null
+                ? null
+                : request.getSession(false).getAttribute("motivoInativacao");
+        if (motivo != null) {
+            model.addAttribute("motivoInativacao", motivo);
+            request.getSession(false).removeAttribute("motivoInativacao");
+        }
+        Object inativadoAte = request.getSession(false) == null
+                ? null
+                : request.getSession(false).getAttribute("inativadoAte");
+        if (inativadoAte != null) {
+            model.addAttribute("inativadoAte", inativadoAte);
+            request.getSession(false).removeAttribute("inativadoAte");
+        }
         return "login";
     }
 
@@ -50,12 +68,19 @@ public class AuthController {
             return "cadastro";
         }
 
-        if (usuarioRepository.findByEmail(dto.email()).isPresent()) {
+        if (usuarioRepository.findByEmailHash(EmailHash.of(dto.email())).isPresent()) {
             bindingResult.rejectValue("email", "error.cadastroDTO", "Já existe um usuário cadastrado com este e-mail.");
             return "cadastro";
         }
 
-        Usuario novoUsuario = new Usuario(dto.nome(), dto.email(), encoder.encode(dto.senha()), Role.ROLE_ESTUDANTE, StatusCadastro.ATIVO, LocalDateTime.now());
+        Usuario novoUsuario = new Usuario(
+                dto.nome(),
+                dto.email(),
+                encoder.encode(dto.senha()),
+                Role.ROLE_ESTUDANTE,
+                StatusCadastro.ATIVO,
+                ZonedDateTime.now(ClockConfig.ZONA_BRASIL).toLocalDateTime()
+        );
         usuarioRepository.save(novoUsuario);
         auditoriaService.registrar(
                 novoUsuario.getEmail(),

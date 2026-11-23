@@ -95,6 +95,14 @@
                     <p class="text-secondary mb-4">Continue de onde parou.</p>
 
                     <div th:if="${param.error}" class="alert ritmo-alert-erro" role="alert">E-mail ou senha inválidos. Confira os dados e tente novamente.</div>
+                    <div th:if="${param.erro}" class="alert ritmo-alert-erro" role="alert">E-mail ou senha inválidos. Confira os dados e tente novamente.</div>
+                    <div th:if="${motivoInativacao != null}" class="alert ritmo-alert-erro" role="alert">
+                        <strong>Seu cadastro está inativo.</strong>
+                        <span th:text="'Motivo informado pelo administrador: ' + ${motivoInativacao}"></span>
+                        <span class="d-block mt-1"
+                              th:if="${inativadoAte != null}"
+                              th:text="'O acesso será restabelecido automaticamente em: ' + ${#temporals.format(inativadoAte, 'dd/MM/yyyy HH:mm')}"></span>
+                    </div>
                     <div th:if="${param.logout}" class="alert ritmo-alert-info" role="status">Sessão encerrada com sucesso.</div>
                     <div th:if="${param.cadastrado}" class="alert ritmo-alert-sucesso" role="status">Conta criada com sucesso! Faça login.</div>
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section layout:fragment="content">
+    <header class="mb-4">
+        <h1 class="fw-bold mb-1">Usuários</h1>
+        <p class="text-secondary mb-0">Gerencie o status dos cadastros e permissões administrativas.</p>
+    </header>
+
+    <div th:if="${erroUsuario}" class="alert alert-danger" th:text="${erroUsuario}" role="alert"></div>
+    <div th:if="${param.atualizado}" class="alert alert-success" role="status">Cadastro atualizado.</div>
+    <div th:if="${param.excluido}" class="alert alert-success" role="status">Cadastro excluído permanentemente.</div>
+
+    <section class="card border-0 shadow-sm rounded-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Perfil</th>
+                    <th>Status</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.nome}">Nome</td>
+                    <td th:text="${usuario.email}">email@exemplo.com</td>
+                    <td>
+                        <span class="badge" th:classappend="${usuario.role.name() == 'ROLE_ADMIN'} ? ' text-bg-primary' : ' text-bg-secondary'"
+                              th:text="${usuario.role.name() == 'ROLE_ADMIN'} ? 'Administrador' : 'Estudante'">Estudante</span>
+                    </td>
+                    <td>
+                        <span class="badge" th:classappend="${usuario.status.name() == 'ATIVO'} ? ' text-bg-success' : ' text-bg-danger'"
+                              th:text="${usuario.status.name()}">ATIVO</span>
+                        <small class="d-block text-secondary mt-1" th:if="${usuario.motivoInativacao != null}"
+                               th:text="${usuario.motivoInativacao}">Motivo</small>
+                    </td>
+                    <td class="text-end">
+                        <form th:if="${usuario.status.name() == 'ATIVO' and usuario.role.name() != 'ROLE_ADMIN'}"
+                              th:action="@{/admin/usuarios/{id}/promover(id=${usuario.id})}"
+                              method="post" class="d-inline">
+                            <button class="btn btn-sm btn-outline-primary rounded-pill" type="submit">Promover</button>
+                        </form>
+                        <form th:if="${usuario.status.name() == 'ATIVO'}"
+                              th:action="@{/admin/usuarios/{id}/inativar(id=${usuario.id})}"
+                              method="post" class="d-inline-flex align-items-center gap-2"
+                              th:object="${inativacaoInput}">
+                            <input type="hidden" name="usuarioId" th:value="${usuario.id}">
+                            <input class="form-control form-control-sm"
+                                   th:name="motivo"
+                                   th:value="${usuarioSelecionadoId == usuario.id} ? *{motivo} : ''"
+                                   maxlength="500"
+                                   placeholder="Motivo da inativação"
+                                   required>
+                            <button class="btn btn-sm btn-outline-danger rounded-pill" type="submit">Inativar</button>
+                        </form>
+                        <form th:if="${usuario.status.name() == 'INATIVO'}"
+                              th:action="@{/admin/usuarios/{id}/reativar(id=${usuario.id})}"
+                              method="post" class="d-inline">
+                            <button class="btn btn-sm btn-outline-success rounded-pill" type="submit">Reativar</button>
+                        </form>
+                        <form th:action="@{/admin/usuarios/{id}/excluir(id=${usuario.id})}"
+                              method="post"
+                              class="d-inline"
+                              data-confirmacao="Excluir este cadastro permanentemente? Esta ação não pode ser desfeita.">
+                            <button class="btn btn-sm btn-outline-danger rounded-pill" type="submit">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>
+</html>

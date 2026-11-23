@@ -2,6 +2,9 @@ package app.ritmo.aplicacaoritmo.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import app.ritmo.aplicacaoritmo.infra.security.EmailHash;
+import app.ritmo.aplicacaoritmo.infra.config.ClockConfig;
+import java.time.ZonedDateTime;
 
 import java.time.LocalDateTime;
 
@@ -15,8 +18,12 @@ public class Usuario {
     @Column(nullable = false, length = 150)
     private String nome;
 
-    @Column(nullable = false, length = 255, unique = true)
+    @Convert(converter = app.ritmo.aplicacaoritmo.infra.security.EmailEncryptionConverter.class)
+    @Column(nullable = false, length = 1024, unique = true)
     private String email;
+
+    @Column(name = "email_hash", length = 64, unique = true)
+    private String emailHash;
 
     @Column(nullable = false, length = 255)
     private String senha;
@@ -30,10 +37,29 @@ public class Usuario {
     private StatusCadastro status;
 
     @Column(nullable = false)
-    private LocalDateTime dataCadastro = LocalDateTime.now();
+    private LocalDateTime dataCadastro =
+            ZonedDateTime.now(ClockConfig.ZONA_BRASIL).toLocalDateTime();
 
     @Column(nullable = false)
     private LocalDateTime termoAceitoEm;
+
+    @Column(name = "motivo_inativacao", length = 500)
+    private String motivoInativacao;
+
+    @Column(name = "inativado_em")
+    private LocalDateTime inativadoEm;
+
+    @Column(name = "inativado_ate")
+    private LocalDateTime inativadoAte;
+
+    @PrePersist
+    @PreUpdate
+    private void atualizarEmailHash() {
+        if (email != null) {
+            this.email = email.trim().toLowerCase();
+        }
+        this.emailHash = EmailHash.of(email);
+    }
 
     public Usuario() {}
 
