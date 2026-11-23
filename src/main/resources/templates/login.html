@@ -105,6 +105,7 @@
                     </div>
                     <div th:if="${param.logout}" class="alert ritmo-alert-info" role="status">Sessão encerrada com sucesso.</div>
                     <div th:if="${param.cadastrado}" class="alert ritmo-alert-sucesso" role="status">Conta criada com sucesso! Faça login.</div>
+                    <div th:if="${param.contaExcluida}" class="alert ritmo-alert-info" role="status">Sua conta foi excluída e a sessão foi encerrada.</div>
 
                     <form th:action="@{/login}" method="post">
                         <div class="mb-3">

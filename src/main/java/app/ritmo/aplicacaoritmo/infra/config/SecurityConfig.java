@@ -4,6 +4,7 @@ import app.ritmo.aplicacaoritmo.domain.Role;
 import app.ritmo.aplicacaoritmo.infra.security.LoginBemSucedidoHandler;
 import app.ritmo.aplicacaoritmo.infra.security.LoginFalhouHandler;
 import app.ritmo.aplicacaoritmo.infra.security.LogoutBemSucedidoHandler;
+import app.ritmo.aplicacaoritmo.infra.security.UsuarioSessionStatusFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +24,7 @@ public class SecurityConfig {
     private final LoginBemSucedidoHandler loginBemSucedidoHandler;
     private final LoginFalhouHandler loginFalhouHandler;
     private final LogoutBemSucedidoHandler logoutBemSucedidoHandler;
+    private final UsuarioSessionStatusFilter usuarioSessionStatusFilter;
 
     // bean de criptografia, disponível para toda a aplicação
     @Bean
@@ -44,6 +47,10 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasAuthority(Role.ROLE_ADMIN.name())
                 .anyRequest()
                 .authenticated()
+                )
+                .addFilterBefore(
+                        usuarioSessionStatusFilter,
+                        UsernamePasswordAuthenticationFilter.class
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
