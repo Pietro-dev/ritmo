@@ -1,10 +1,13 @@
 package app.ritmo.aplicacaoritmo.domain;
 
 import jakarta.persistence.*;
+import app.ritmo.aplicacaoritmo.infra.security.EmailHash;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import app.ritmo.aplicacaoritmo.infra.config.ClockConfig;
 
 @Entity
 @Table(name = "auditorias")
@@ -16,8 +19,12 @@ public class Auditoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Convert(converter = app.ritmo.aplicacaoritmo.infra.security.EmailEncryptionConverter.class)
+    @Column(name = "usuario_email", nullable = false, length = 1024)
     private String usuarioEmail;
+
+    @Column(name = "usuario_email_hash", length = 64)
+    private String usuarioEmailHash;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 80)
@@ -30,9 +37,10 @@ public class Auditoria {
     private LocalDateTime dataHora;
 
     public Auditoria(String usuarioEmail, AcaoAuditoria acao, String descricao) {
-        this.usuarioEmail = usuarioEmail;
+        this.usuarioEmail = usuarioEmail == null ? null : usuarioEmail.trim().toLowerCase();
+        this.usuarioEmailHash = EmailHash.of(usuarioEmail);
         this.acao = acao;
         this.descricao = descricao;
-        this.dataHora = LocalDateTime.now();
+        this.dataHora = ZonedDateTime.now(ClockConfig.ZONA_BRASIL).toLocalDateTime();
     }
 }

@@ -3,6 +3,7 @@ package app.ritmo.aplicacaoritmo.services;
 import app.ritmo.aplicacaoritmo.domain.Usuario;
 import app.ritmo.aplicacaoritmo.domain.StatusCadastro;
 import app.ritmo.aplicacaoritmo.repositories.UsuarioRepository;
+import app.ritmo.aplicacaoritmo.infra.security.EmailHash;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

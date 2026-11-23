@@ -8,6 +8,7 @@ import app.ritmo.aplicacaoritmo.repositories.AuditoriaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageImpl;
+import app.ritmo.aplicacaoritmo.infra.security.EmailHash;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
@@ -65,7 +66,7 @@ class AuditoriaServiceTest {
         var pageable = PageRequest.of(0, 10);
         Auditoria auditoria = new Auditoria("aluno@example.com", AcaoAuditoria.LOGIN, "Login");
         when(repository.pesquisar(
-                "aluno@example.com",
+                EmailHash.of("aluno@example.com"),
                 inicio.atStartOfDay(),
                 fim.plusDays(1).atStartOfDay(),
                 pageable
@@ -78,7 +79,7 @@ class AuditoriaServiceTest {
         assertEquals("aluno@example.com", dto.usuarioEmail());
         assertEquals(AcaoAuditoria.LOGIN, dto.acao());
         verify(repository).pesquisar(
-                "aluno@example.com",
+                EmailHash.of("aluno@example.com"),
                 inicio.atStartOfDay(),
                 fim.plusDays(1).atStartOfDay(),
                 pageable
