@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import app.ritmo.aplicacaoritmo.infra.security.EmailHash;
+import java.time.ZonedDateTime;
 
-import java.time.LocalDateTime;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -31,14 +32,16 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if(usuarioRepository.findByEmail(adminEmail).isEmpty()) {
+        if(usuarioRepository.findByEmailHash(EmailHash.of(adminEmail)).isEmpty()) {
             Usuario admin = new Usuario();
             admin.setNome(adminNome);
             admin.setEmail(adminEmail);
             admin.setSenha(passwordEncoder.encode(adminSenha));
             admin.setRole(Role.ROLE_ADMIN);
             admin.setStatus(StatusCadastro.ATIVO);
-            admin.setTermoAceitoEm(LocalDateTime.now());
+            admin.setTermoAceitoEm(
+                    ZonedDateTime.now(ClockConfig.ZONA_BRASIL).toLocalDateTime()
+            );
 
             usuarioRepository.save(admin);
             System.out.println(">>> Usuário ADMIN inicializado com sucesso!");

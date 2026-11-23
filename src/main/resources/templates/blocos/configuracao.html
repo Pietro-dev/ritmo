@@ -9,19 +9,11 @@
     <div class="py-2">
 
         <!-- Cabeçalho Principal -->
-        <header class="mb-4 p-4 p-lg-5 rounded-4 bg-primary bg-opacity-10 border border-primary border-opacity-10">
-            <div class="d-flex align-items-center gap-3">
-                <span class="ritmo-icon-tile bg-primary text-white rounded-4 shadow-sm">
-                    <i class="bi bi-collection-play fs-3" aria-hidden="true"></i>
-                </span>
-
-                <div>
-                    <h1 class="fw-bold text-dark mb-1">Criar Bloco de Estudos</h1>
-                    <p class="text-secondary mb-0">
-                        Monte seu treino personalizado definindo a matéria, a duração e os tópicos desejados.
-                    </p>
-                </div>
-            </div>
+        <header class="mb-4 p-4 p-lg-5 rounded-4 ritmo-card-roxo shadow-sm">
+            <h1 class="fw-bold mb-1">Criar Bloco de Estudos</h1>
+            <p class="mb-0 opacity-75">
+                Monte seu treino personalizado definindo a matéria, a duração e os tópicos desejados.
+            </p>
         </header>
 
         <!-- Alerta de Erro -->
@@ -33,7 +25,7 @@
         </div>
 
         <!-- Etapa 1: Seleção da Disciplina (Laranja Ritmo) -->
-        <section class="card border-0 shadow-sm rounded-4 mb-4">
+        <section id="criar-bloco" class="card border-0 shadow-sm rounded-4 mb-4">
             <div class="card-body p-4 p-lg-5">
                 <div class="d-flex align-items-center gap-2 mb-4">
                     <span class="ritmo-icon-tile ritmo-icon-tile-sm ritmo-card-laranja rounded-3">
@@ -42,7 +34,17 @@
                     <h2 class="h5 fw-bold mb-0">1. Escolha a Disciplina</h2>
                 </div>
 
-                <form th:action="@{/blocos/configuracao}" method="get">
+                <div th:if="${#lists.isEmpty(disciplinas)}"
+                     class="alert ritmo-alert-info rounded-4 p-4 text-center mb-0"
+                     role="status">
+                    <i class="bi bi-journal-plus fs-3 d-block mb-2 text-primary" aria-hidden="true"></i>
+                    <p class="fw-medium mb-2">Você ainda não cadastrou nenhuma disciplina.</p>
+                    <a class="btn btn-ritmo-primary rounded-pill" th:href="@{/disciplinas}">
+                        Cadastrar minha primeira disciplina
+                    </a>
+                </div>
+
+                <form th:action="@{/blocos/configuracao}" method="get" th:unless="${#lists.isEmpty(disciplinas)}">
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
                         <div th:each="disciplina : ${disciplinas}" class="col">
                             <input type="radio"
@@ -101,8 +103,8 @@
                                 <input type="radio" class="btn-check" id="duracao5" th:field="*{duracaoMinutos}" value="5">
                                 <label class="btn ritmo-btn-duracao w-100 p-4 rounded-4 text-start h-100 shadow-sm" for="duracao5">
                                     <span class="d-block fw-bold fs-4 mb-2">5 Minutos</span>
-                                    <!-- Classe badge-duracao adicionada aqui -->
                                     <span class="badge badge-duracao fs-6 px-3 py-2 rounded-pill">5 perguntas</span>
+                                    <span class="d-block small mt-2">Máximo de 1 tópico</span>
                                 </label>
                             </div>
 
@@ -240,6 +242,88 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="meus-blocos" class="card border-0 shadow-sm rounded-4 mt-4">
+            <div class="card-body p-4 p-lg-5">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+                    <div>
+                        <h2 class="h4 fw-bold mb-1">Meus blocos</h2>
+                        <p class="text-secondary mb-0">Acompanhe blocos de estudo e revisão criados por você.</p>
+                    </div>
+                </div>
+
+                <div th:if="${blocos.empty}" class="text-center py-4">
+                    <i class="bi bi-collection fs-1 text-primary" aria-hidden="true"></i>
+                    <p class="text-secondary mt-3 mb-0">Nenhum bloco foi criado ainda.</p>
+                </div>
+
+                <div th:unless="${blocos.empty}" class="row g-3">
+                    <article th:each="bloco : ${blocos.content}" class="col-12 col-md-6">
+                        <div class="border rounded-4 p-3 h-100">
+                            <div class="d-flex align-items-start justify-content-between gap-2">
+                                <div>
+                                    <span class="badge rounded-pill mb-2"
+                                          th:classappend="${bloco.tipo.name() == 'ESTUDO'} ? ' text-bg-primary' : ' text-bg-secondary'"
+                                          th:text="${bloco.tipo.name() == 'ESTUDO'} ? 'Estudo' : 'Revisão'">Estudo</span>
+                                    <h3 class="h6 fw-bold mb-1" th:text="|Bloco #${bloco.id}|">Bloco</h3>
+                                    <p class="text-secondary small mb-2"
+                                       th:text="|${bloco.duracaoMinutos} minutos • ${bloco.quantidadePerguntas} perguntas|"></p>
+                                    <div class="small" th:if="${!#lists.isEmpty(bloco.topicos)}">
+                                        <p class="mb-1">
+                                            <span class="text-secondary">Disciplina:</span>
+                                            <span class="fw-semibold" th:text="${bloco.topicos[0].disciplinaNome}">Disciplina</span>
+                                        </p>
+                                        <p class="mb-0">
+                                            <span class="text-secondary">Tópicos:</span>
+                                            <span th:each="topico, iter : ${bloco.topicos}">
+                                                <span th:text="${topico.nome}">Tópico</span><span th:if="${!iter.last}">, </span>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="badge rounded-pill"
+                                      th:classappend="${bloco.status.name() == 'PENDENTE'} ? ' text-bg-warning' : (${bloco.status.name() == 'EM_ANDAMENTO'} ? ' text-bg-primary' : ' text-bg-success')"
+                                      th:text="${bloco.status.name() == 'PENDENTE'} ? 'Não concluído' : (${bloco.status.name() == 'EM_ANDAMENTO'} ? 'Em andamento' : 'Concluído')">Não concluído</span>
+                            </div>
+
+                            <a th:if="${bloco.status.name() == 'PENDENTE'}"
+                               class="btn btn-sm btn-ritmo-primary rounded-pill mt-2"
+                               th:href="@{/sessoes/{id}(id=${bloco.id})}">
+                                Iniciar
+                            </a>
+                            <a th:if="${bloco.status.name() == 'EM_ANDAMENTO'}"
+                               class="btn btn-sm btn-outline-primary rounded-pill mt-2"
+                               th:href="@{/sessoes/{id}/pergunta(id=${bloco.id})}">
+                                Retomar
+                            </a>
+                        </div>
+                    </article>
+                </div>
+
+                <nav th:if="${blocos.totalPages > 1}"
+                     class="d-flex justify-content-between align-items-center gap-3 mt-4"
+                     aria-label="Paginação do histórico de blocos">
+                    <a th:if="${blocos.hasPrevious}"
+                       class="btn btn-outline-primary rounded-pill"
+                       th:href="@{/blocos/configuracao(disciplinaId=${disciplinaSelecionadaId},page=${blocos.number - 1})}">
+                        Anterior
+                    </a>
+                    <span th:if="${!blocos.hasPrevious}" class="invisible">Anterior</span>
+
+                    <span class="text-secondary small"
+                          th:text="|Página ${blocos.number + 1} de ${blocos.totalPages}|">
+                        Página 1 de 1
+                    </span>
+
+                    <a th:if="${blocos.hasNext}"
+                       class="btn btn-outline-primary rounded-pill"
+                       th:href="@{/blocos/configuracao(disciplinaId=${disciplinaSelecionadaId},page=${blocos.number + 1})}">
+                        Próxima
+                    </a>
+                    <span th:if="${!blocos.hasNext}" class="invisible">Próxima</span>
+                </nav>
             </div>
         </section>
     </div>

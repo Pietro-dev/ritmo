@@ -10,25 +10,14 @@
         <div class="col-12 col-lg-8">
 
             <!-- Cabeçalho -->
-            <header class="d-flex align-items-center gap-3 mb-4">
-
-                <span class="d-inline-flex align-items-center justify-content-center
-                             rounded-4 bg-primary bg-opacity-10 text-primary flex-shrink-0 icone-60">
-                    <i class="bi bi-pencil-square fs-2"
+            <header class="mb-4">
+                <h1 class="h3 fw-bold mb-1">Editar pergunta</h1>
+                <p class="text-secondary mb-0">
+                    <span th:text="${disciplina.nome}">Disciplina</span>
+                    <i class="bi bi-chevron-right mx-1 small"
                        aria-hidden="true"></i>
-                </span>
-
-                <div>
-                    <h1 class="h3 fw-bold mb-1">Editar pergunta</h1>
-
-                    <p class="text-secondary mb-0">
-                        <span th:text="${disciplina.nome}">Disciplina</span>
-                        <i class="bi bi-chevron-right mx-1 small"
-                           aria-hidden="true"></i>
-                        <span th:text="${topico.nome}">Tópico</span>
-                    </p>
-                </div>
-
+                    <span th:text="${topico.nome}">Tópico</span>
+                </p>
             </header>
 
             <!-- Formulário -->

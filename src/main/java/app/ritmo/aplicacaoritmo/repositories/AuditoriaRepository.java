@@ -13,7 +13,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AuditoriaRepository extends JpaRepository<Auditoria, Long> {
-    long deleteByUsuarioEmailIgnoreCase(String usuarioEmail);
+    long deleteByUsuarioEmailHash(String usuarioEmailHash);
+
+    default long deleteByUsuarioEmailIgnoreCase(String usuarioEmail) {
+        return deleteByUsuarioEmailHash(
+                app.ritmo.aplicacaoritmo.infra.security.EmailHash.of(usuarioEmail)
+        );
+    }
 
     @Modifying
     @Query(value = "DELETE FROM auditorias WHERE data_hora < :limite", nativeQuery = true)
@@ -22,7 +28,7 @@ public interface AuditoriaRepository extends JpaRepository<Auditoria, Long> {
     @Query(value = """
             SELECT a.data_hora AS "dataHora", a.acao AS "acao"
             FROM auditorias a
-            JOIN usuario u ON u.email = a.usuario_email
+            JOIN usuario u ON u.email_hash = a.usuario_email_hash
             WHERE u.role = 'ROLE_ADMIN'
               AND a.acao IN (
                   'CRIAR_CONTA', 'ATUALIZAR_PERFIL', 'CONSULTAR_AUDITORIAS',
@@ -40,7 +46,7 @@ public interface AuditoriaRepository extends JpaRepository<Auditoria, Long> {
         FROM auditorias
         WHERE (
             CAST(:email AS VARCHAR) IS NULL
-            OR LOWER(usuario_email) LIKE LOWER(CONCAT('%', CAST(:email AS VARCHAR), '%'))
+            OR usuario_email_hash = CAST(:email AS VARCHAR)
         )
         AND (
             CAST(:inicio AS TIMESTAMP) IS NULL
@@ -57,7 +63,7 @@ public interface AuditoriaRepository extends JpaRepository<Auditoria, Long> {
         FROM auditorias
         WHERE (
             CAST(:email AS VARCHAR) IS NULL
-            OR LOWER(usuario_email) LIKE LOWER(CONCAT('%', CAST(:email AS VARCHAR), '%'))
+            OR usuario_email_hash = CAST(:email AS VARCHAR)
         )
         AND (
             CAST(:inicio AS TIMESTAMP) IS NULL

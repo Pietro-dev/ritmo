@@ -51,8 +51,7 @@
         <div class="card-body p-4">
             <h2 class="h4 fw-bold text-danger mb-2" id="tituloExcluir">Excluir conta</h2>
             <p class="text-secondary">
-                A exclusão é permanente e remove seus dados de estudo e registros de auditoria.
-                Uma conta administrativa só pode ser excluída se houver outro administrador ativo.
+                A exclusão é permanente e remove seus dados de estudo.
             </p>
             <div th:if="${erroExclusao}" class="alert alert-danger" role="alert" th:text="${erroExclusao}"></div>
             <form th:action="@{/conta/excluir}" th:object="${exclusaoInput}" method="post">

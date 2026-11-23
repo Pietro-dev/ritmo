@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import app.ritmo.aplicacaoritmo.infra.config.ClockConfig;
+import java.time.ZonedDateTime;
 
 import java.time.LocalDateTime;
 
@@ -50,7 +52,7 @@ public class SessaoEstudo {
         this.duracaoMinutos = duracaoMinutos;
         this.tipo = tipo;
         this.status = StatusSessao.PENDENTE;
-        this.criadaEm = LocalDateTime.now();
+        this.criadaEm = ZonedDateTime.now(ClockConfig.ZONA_BRASIL).toLocalDateTime();
     }
 
     public void iniciarEm(LocalDateTime inicio) {

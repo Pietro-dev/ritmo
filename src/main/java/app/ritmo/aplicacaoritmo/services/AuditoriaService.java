@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import app.ritmo.aplicacaoritmo.infra.security.EmailHash;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +57,7 @@ public class AuditoriaService {
             fimDateTime = fim.plusDays(1).atStartOfDay();
         }
 
-        String emailNormalizado = normalizarEmail(email);
+        String emailNormalizado = EmailHash.of(email);
 
         return repository.pesquisar(emailNormalizado, inicioDateTime, fimDateTime, pageable)
                 .map(AuditoriaOutputDTO::fromEntity);
