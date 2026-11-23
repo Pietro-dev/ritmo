@@ -12,10 +12,14 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 import java.util.List;
 import java.time.LocalDateTime;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface SessaoEstudoRepository extends JpaRepository<SessaoEstudo, Long> {
 
     Optional<SessaoEstudo> findByIdAndUsuario_Id(Long sessaoId,  Long usuarioId);
+
+    Page<SessaoEstudo> findByUsuario_IdOrderByCriadaEmDesc(Long usuarioId, Pageable pageable);
 
     boolean existsByUsuario_IdAndStatus(Long usuarioId, StatusSessao status);
 

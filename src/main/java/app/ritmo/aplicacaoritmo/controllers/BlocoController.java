@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import org.springframework.data.domain.PageRequest;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,11 +29,19 @@ public class BlocoController {
     private final SessaoService sessaoService;
 
     // Exibe o formulário e, se houver disciplina selecionada, carrega seus tópicos.
+    public String exibirFormulario(Long disciplinaId, Model model) {
+        return exibirFormulario(disciplinaId, 0, model);
+    }
+
     @GetMapping
-    public String exibirFormulario(@RequestParam(required = false) Long disciplinaId, Model model) {
+    public String exibirFormulario(
+            @RequestParam(required = false) Long disciplinaId,
+            @RequestParam(defaultValue = "0") int page,
+            Model model
+    ) {
         BlocoInputDTO formulario = new BlocoInputDTO(disciplinaId, 5, List.of());
 
-        carregarFormulario(disciplinaId, formulario, model);
+        carregarFormulario(disciplinaId, formulario, page, model);
         return "blocos/configuracao";
     }
 
@@ -44,7 +53,14 @@ public class BlocoController {
             Model model
     ) {
         if (resultado.hasErrors()) {
-            carregarFormulario(formulario.disciplinaId(), formulario, model);
+            carregarFormulario(formulario.disciplinaId(), formulario, 0, model);
+            model.addAttribute(
+                    "erroConfiguracao",
+                    resultado.getAllErrors().stream()
+                            .findFirst()
+                            .map(erro -> erro.getDefaultMessage())
+                            .orElse("Revise os dados informados.")
+            );
             return "blocos/configuracao";
         }
 
@@ -52,12 +68,17 @@ public class BlocoController {
             Long sessaoId = sessaoService.criar(formulario);
             return "redirect:/sessoes/" + sessaoId;
         } catch (NegocioException ex) {
-            carregarFormulario(formulario.disciplinaId(), formulario, model);
+            carregarFormulario(formulario.disciplinaId(), formulario, 0, model);
             model.addAttribute("erroConfiguracao", ex.getMessage());
             return "blocos/configuracao";
         }
     }
-    private void carregarFormulario(Long disciplinaId, BlocoInputDTO formulario, Model model) {
+    private void carregarFormulario(
+            Long disciplinaId,
+            BlocoInputDTO formulario,
+            int page,
+            Model model
+    ) {
         var disciplinas = disciplinaService.listarDoUsuarioLogado();
 
         boolean disciplinaDoUsuario = disciplinaId != null && disciplinas.stream()
@@ -68,5 +89,9 @@ public class BlocoController {
         model.addAttribute("configuracaoInput", formulario);
         model.addAttribute("disciplinaSelecionadaId", disciplinaDoUsuario ? disciplinaId : null);
         model.addAttribute("topicosDisponiveis", disciplinaDoUsuario ? topicoService.listarTopicosDaDisciplina(disciplinaId) : List.of());
+        model.addAttribute(
+                "blocos",
+                sessaoService.listarDoUsuarioLogado(PageRequest.of(Math.max(page, 0), 6))
+        );
     }
 }

@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +47,17 @@ public class SessaoService {
     private final RevisaoService revisaoService;
     private final AuditoriaService auditoriaService;
     private final Clock clock;
+
+    @Transactional
+    public Page<SessaoResumoDTO> listarDoUsuarioLogado(Pageable pageable) {
+        Usuario usuario = securityUtils.getUsuarioLogado();
+        Page<SessaoEstudo> sessoes = sessaoRepository
+                .findByUsuario_IdOrderByCriadaEmDesc(usuario.getId(), pageable);
+        List<SessaoResumoDTO> conteudo = sessoes.getContent().stream()
+                .map(sessao -> buscarResumo(sessao.getId()))
+                .toList();
+        return new PageImpl<>(conteudo, pageable, sessoes.getTotalElements());
+    }
 
     //cria a sessão de estudo
     @Transactional
@@ -96,19 +110,25 @@ public class SessaoService {
 
         List<ItemSessao> itens = itemSessaoRepository.findBySessao_IdOrderByPosicaoAsc(sessaoId);
 
-        Map<String, Long> perguntasPorTopico = itens.stream()
+        Map<String, Map<String, Long>> perguntasPorDisciplinaETopico = itens.stream()
                 .collect(Collectors.groupingBy(
-                        ItemSessao::getTopicoNomeSnapshot,
+                        ItemSessao::getDisciplinaNomeSnapshot,
                         LinkedHashMap::new,
-                        Collectors.counting()
+                        Collectors.groupingBy(
+                                ItemSessao::getTopicoNomeSnapshot,
+                                LinkedHashMap::new,
+                                Collectors.counting()
+                        )
                 ));
 
-        List<SessaoResumoDTO.TopicoResumoDTO> topicos = perguntasPorTopico.entrySet().stream()
-                        .map(entrada -> new SessaoResumoDTO.TopicoResumoDTO(
-                                entrada.getKey(),
-                                Math.toIntExact(entrada.getValue())
-                        ))
-                        .toList();
+        List<SessaoResumoDTO.TopicoResumoDTO> topicos = perguntasPorDisciplinaETopico.entrySet().stream()
+                .flatMap(disciplina -> disciplina.getValue().entrySet().stream()
+                        .map(topico -> new SessaoResumoDTO.TopicoResumoDTO(
+                                topico.getKey(),
+                                Math.toIntExact(topico.getValue()),
+                                disciplina.getKey()
+                        )))
+                .toList();
 
         return new SessaoResumoDTO(
                 sessao.getId(),

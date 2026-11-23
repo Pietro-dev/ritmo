@@ -19,7 +19,8 @@ public record SessaoResumoDTO(
 ) {
     public record TopicoResumoDTO(
             String nome,
-            int quantidadePerguntas
+            int quantidadePerguntas,
+            String disciplinaNome
     ) {
     }
 }
